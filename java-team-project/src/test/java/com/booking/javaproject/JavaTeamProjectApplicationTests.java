@@ -1,4 +1,4 @@
-package com.ayaz.javaproject;
+package com.booking.javaproject;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

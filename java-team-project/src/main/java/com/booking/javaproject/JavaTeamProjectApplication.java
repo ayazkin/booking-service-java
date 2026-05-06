@@ -1,4 +1,4 @@
-package com.ayaz.javaproject;
+package com.booking.javaproject;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
