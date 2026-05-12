@@ -7,9 +7,17 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
+
 public interface RoomRepository extends JpaRepository<Room, Long> {
 
+    List<Room> findAllByOrderByNumberAsc();
+
     Page<Room> findByActiveTrue(Pageable pageable);
+
+    boolean existsByNumber(String number);
+
+    boolean existsByNumberAndIdNot(String number, Long id);
 
     @Query("""
             select distinct r
