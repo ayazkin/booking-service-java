@@ -24,6 +24,11 @@ public class EquipmentService {
     }
 
     @Transactional(readOnly = true)
+    public List<Equipment> findActive() {
+        return equipmentRepository.findByActiveTrueOrderByNameAsc();
+    }
+
+    @Transactional(readOnly = true)
     public Equipment findById(Long id) {
         return equipmentRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Equipment not found"));

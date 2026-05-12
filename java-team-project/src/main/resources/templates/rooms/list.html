@@ -13,7 +13,7 @@
         }
 
         main {
-            max-width: 1040px;
+            max-width: 1120px;
             margin: 0 auto;
             padding: 32px 20px;
         }
@@ -22,6 +22,70 @@
             margin: 0 0 24px;
             font-size: 32px;
             font-weight: 700;
+        }
+
+        .filters {
+            display: grid;
+            grid-template-columns: minmax(180px, 2fr) minmax(130px, 1fr) minmax(110px, 1fr) minmax(180px, 1.5fr);
+            gap: 14px;
+            align-items: end;
+            margin-bottom: 20px;
+            padding: 16px;
+            background: #ffffff;
+            border: 1px solid #d7dce2;
+        }
+
+        label {
+            display: grid;
+            gap: 6px;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        input,
+        select {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 10px 12px;
+            border: 1px solid #cfd6df;
+            font: inherit;
+            background: #ffffff;
+        }
+
+        .checkbox {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            min-height: 40px;
+            font-weight: 700;
+        }
+
+        .checkbox input {
+            width: auto;
+        }
+
+        .filter-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        button,
+        .button-link {
+            display: inline-block;
+            padding: 10px 12px;
+            border: 1px solid #cfd6df;
+            color: #1f2937;
+            background: #ffffff;
+            font: inherit;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .primary {
+            border-color: #111827;
+            background: #111827;
+            color: #ffffff;
         }
 
         table {
@@ -85,14 +149,63 @@
             color: #8a94a3;
             background: #eef2f7;
         }
+
+        @media (max-width: 800px) {
+            .filters {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
 <main>
     <h1>Аудитории</h1>
 
+    <form class="filters" th:action="@{/rooms}" method="get">
+        <input type="hidden" name="filter" value="true">
+        <input type="hidden" name="size" th:value="${roomsPage.size}">
+
+        <label>
+            Номер или название
+            <input type="text" name="query" th:value="${query}">
+        </label>
+
+        <label>
+            Вместимость от
+            <input type="number" name="minCapacity" min="1" th:value="${minCapacity}">
+        </label>
+
+        <label>
+            Этаж
+            <input type="number" name="floor" th:value="${floor}">
+        </label>
+
+        <label>
+            Оборудование
+            <select name="equipmentId">
+                <option value="">Любое</option>
+                <option th:each="item : ${equipmentOptions}"
+                        th:value="${item.id}"
+                        th:text="${item.name}"
+                        th:selected="${equipmentId != null and item.id == equipmentId}">
+                    Проектор
+                </option>
+            </select>
+        </label>
+
+        <label class="checkbox">
+            <input type="checkbox" name="activeOnly" value="true" th:checked="${activeOnly}">
+            Только активные
+        </label>
+
+        <div class="filter-actions">
+            <button class="primary" type="submit">Найти</button>
+            <a class="button-link" th:href="@{/rooms}">Сбросить</a>
+        </div>
+    </form>
+
     <div class="empty" th:if="${roomsPage.empty}">
-        Нет доступных аудиторий
+        Нет аудиторий по заданным фильтрам
     </div>
 
     <table th:if="${!roomsPage.empty}">
@@ -102,6 +215,7 @@
             <th>Название</th>
             <th>Вместимость</th>
             <th>Этаж</th>
+            <th>Оборудование</th>
             <th>Описание</th>
         </tr>
         </thead>
@@ -111,6 +225,12 @@
             <td th:text="${room.name}">Лекционная аудитория</td>
             <td th:text="${room.capacity}">30</td>
             <td th:text="${room.floor}">1</td>
+            <td>
+                <span th:if="${#sets.isEmpty(room.equipment)}">-</span>
+                <span th:each="item, itemStatus : ${room.equipment}">
+                    <span th:text="${item.name}">Проектор</span><span th:if="${!itemStatus.last}">, </span>
+                </span>
+            </td>
             <td th:text="${room.description ?: '-'}">-</td>
         </tr>
         </tbody>
@@ -118,7 +238,7 @@
 
     <nav class="pagination" th:if="${roomsPage.totalPages > 1}" aria-label="Пагинация">
         <a th:if="${roomsPage.hasPrevious()}"
-           th:href="@{/rooms(page=${roomsPage.number - 1},size=${roomsPage.size})}">
+           th:href="@{/rooms(page=${roomsPage.number - 1},size=${roomsPage.size},query=${query},minCapacity=${minCapacity},floor=${floor},equipmentId=${equipmentId},activeOnly=${activeOnly},filter='true')}">
             Назад
         </a>
         <span class="disabled" th:if="${!roomsPage.hasPrevious()}">Назад</span>
@@ -128,12 +248,12 @@
                   th:if="${pageNumber == roomsPage.number}"
                   th:text="${pageNumber + 1}">1</span>
             <a th:if="${pageNumber != roomsPage.number}"
-               th:href="@{/rooms(page=${pageNumber},size=${roomsPage.size})}"
+               th:href="@{/rooms(page=${pageNumber},size=${roomsPage.size},query=${query},minCapacity=${minCapacity},floor=${floor},equipmentId=${equipmentId},activeOnly=${activeOnly},filter='true')}"
                th:text="${pageNumber + 1}">2</a>
         </span>
 
         <a th:if="${roomsPage.hasNext()}"
-           th:href="@{/rooms(page=${roomsPage.number + 1},size=${roomsPage.size})}">
+           th:href="@{/rooms(page=${roomsPage.number + 1},size=${roomsPage.size},query=${query},minCapacity=${minCapacity},floor=${floor},equipmentId=${equipmentId},activeOnly=${activeOnly},filter='true')}">
             Вперед
         </a>
         <span class="disabled" th:if="${!roomsPage.hasNext()}">Вперед</span>

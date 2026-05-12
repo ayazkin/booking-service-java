@@ -8,4 +8,6 @@ import java.util.List;
 public interface EquipmentRepository extends JpaRepository<Equipment, Long> {
 
     List<Equipment> findAllByOrderByNameAsc();
+
+    List<Equipment> findByActiveTrueOrderByNameAsc();
 }

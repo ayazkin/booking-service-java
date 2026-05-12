@@ -20,4 +20,30 @@ public class RoomService {
     public Page<Room> findActiveRooms(Pageable pageable) {
         return roomRepository.findByActiveTrue(pageable);
     }
+
+    @Transactional(readOnly = true)
+    public Page<Room> searchRooms(
+            String query,
+            Integer minCapacity,
+            Integer floor,
+            Long equipmentId,
+            boolean activeOnly,
+            Pageable pageable
+    ) {
+        return roomRepository.search(
+                normalizeQuery(query),
+                minCapacity,
+                floor,
+                equipmentId,
+                activeOnly,
+                pageable
+        );
+    }
+
+    private String normalizeQuery(String query) {
+        if (query == null || query.isBlank()) {
+            return null;
+        }
+        return query.trim();
+    }
 }
