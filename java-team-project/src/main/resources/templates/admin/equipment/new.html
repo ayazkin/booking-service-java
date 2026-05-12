@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Новое оборудование</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            color: #1f2937;
+            background: #f6f7f9;
+        }
+
+        main {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 32px 20px;
+        }
+
+        h1 {
+            margin: 0 0 24px;
+            font-size: 32px;
+        }
+
+        form {
+            display: grid;
+            gap: 16px;
+            padding: 20px;
+            background: #ffffff;
+            border: 1px solid #d7dce2;
+        }
+
+        label {
+            display: grid;
+            gap: 8px;
+            font-weight: 700;
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 10px 12px;
+            border: 1px solid #cfd6df;
+            font: inherit;
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        a,
+        button {
+            display: inline-block;
+            padding: 9px 12px;
+            border: 1px solid #cfd6df;
+            color: #1f2937;
+            background: #ffffff;
+            font: inherit;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .primary {
+            border-color: #111827;
+            background: #111827;
+            color: #ffffff;
+        }
+
+        .error {
+            padding: 12px;
+            background: #fff1f2;
+            border: 1px solid #fda4af;
+            color: #9f1239;
+        }
+    </style>
+</head>
+<body>
+<main>
+    <h1>Новое оборудование</h1>
+
+    <form th:action="@{/admin/equipment}" method="post">
+        <div class="error" th:if="${error}" th:text="${error}">Ошибка</div>
+
+        <label>
+            Название
+            <input type="text" name="name" required maxlength="120">
+        </label>
+
+        <label>
+            Описание
+            <textarea name="description" maxlength="500" th:text="${description}"></textarea>
+        </label>
+
+        <div class="actions">
+            <button class="primary" type="submit">Создать</button>
+            <a th:href="@{/admin/equipment}">Отмена</a>
+        </div>
+    </form>
+</main>
+</body>
+</html>
