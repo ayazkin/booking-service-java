@@ -1,11 +1,15 @@
 package com.booking.javaproject.equipment.model;
 
+import com.booking.javaproject.room.model.Room;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
+import java.util.HashSet;
+import java.util.Set;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -29,6 +33,9 @@ public class Equipment {
 
     @Column(nullable = false)
     private boolean active = true;
+
+    @ManyToMany(mappedBy = "equipment")
+    private Set<Room> rooms = new HashSet<>();
 
     public Equipment(String name) {
         this.name = name;
