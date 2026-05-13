@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Редактирование аудитории</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            color: #1f2937;
+            background: #f6f7f9;
+        }
+
+        main {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 32px 20px;
+        }
+
+        h1 {
+            margin: 0 0 24px;
+            font-size: 32px;
+        }
+
+        form {
+            display: grid;
+            gap: 16px;
+            padding: 20px;
+            background: #ffffff;
+            border: 1px solid #d7dce2;
+        }
+
+        label {
+            display: grid;
+            gap: 8px;
+            font-weight: 700;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 10px 12px;
+            border: 1px solid #cfd6df;
+            font: inherit;
+            background: #ffffff;
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        select {
+            min-height: 150px;
+        }
+
+        .checkbox {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            font-weight: 700;
+        }
+
+        .checkbox input {
+            width: auto;
+        }
+
+        .actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        a,
+        button {
+            display: inline-block;
+            padding: 9px 12px;
+            border: 1px solid #cfd6df;
+            color: #1f2937;
+            background: #ffffff;
+            font: inherit;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .primary {
+            border-color: #111827;
+            background: #111827;
+            color: #ffffff;
+        }
+
+        .error {
+            padding: 12px;
+            background: #fff1f2;
+            border: 1px solid #fda4af;
+            color: #9f1239;
+        }
+    </style>
+</head>
+<body>
+<main>
+    <h1>Редактирование аудитории</h1>
+
+    <form th:action="@{/admin/rooms/{id}(id=${room.id != null ? room.id : roomId})}" method="post">
+        <div class="error" th:if="${error}" th:text="${error}">Ошибка</div>
+
+        <label>
+            Номер
+            <input type="text" name="number" required maxlength="30" th:value="${room.number}">
+        </label>
+
+        <label>
+            Название
+            <input type="text" name="name" required maxlength="120" th:value="${room.name}">
+        </label>
+
+        <label>
+            Вместимость
+            <input type="number" name="capacity" required min="1" th:value="${room.capacity}">
+        </label>
+
+        <label>
+            Этаж
+            <input type="number" name="floor" required th:value="${room.floor}">
+        </label>
+
+        <label>
+            Описание
+            <textarea name="description" maxlength="1000" th:text="${room.description}"></textarea>
+        </label>
+
+        <label>
+            Оборудование
+            <select name="equipmentIds" multiple size="6">
+                <option th:each="item : ${equipmentOptions}"
+                        th:value="${item.id}"
+                        th:text="${item.name + (item.active ? '' : ' (отключено)')}"
+                        th:selected="${selectedEquipmentIds != null and selectedEquipmentIds.contains(item.id)}">
+                    Проектор
+                </option>
+            </select>
+        </label>
+
+        <label class="checkbox">
+            <input type="checkbox" name="active" value="true" th:checked="${room.active}">
+            Активна
+        </label>
+
+        <div class="actions">
+            <button class="primary" type="submit">Сохранить</button>
+            <a th:href="@{/admin/rooms}">Отмена</a>
+        </div>
+    </form>
+</main>
+</body>
+</html>

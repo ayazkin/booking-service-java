@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Оборудование</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            color: #1f2937;
+            background: #f6f7f9;
+        }
+
+        main {
+            max-width: 1040px;
+            margin: 0 auto;
+            padding: 32px 20px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            gap: 16px;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 32px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #ffffff;
+            border: 1px solid #d7dce2;
+        }
+
+        th,
+        td {
+            padding: 14px 16px;
+            border-bottom: 1px solid #e5e7eb;
+            text-align: left;
+            vertical-align: top;
+        }
+
+        th {
+            background: #eef2f7;
+            font-size: 14px;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        a,
+        button {
+            display: inline-block;
+            padding: 9px 12px;
+            border: 1px solid #cfd6df;
+            color: #1f2937;
+            background: #ffffff;
+            font: inherit;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .primary {
+            border-color: #111827;
+            background: #111827;
+            color: #ffffff;
+        }
+
+        .actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .status {
+            font-weight: 700;
+        }
+
+        .empty {
+            padding: 18px;
+            background: #ffffff;
+            border: 1px solid #d7dce2;
+        }
+    </style>
+</head>
+<body>
+<main>
+    <header>
+        <h1>Оборудование</h1>
+        <a class="primary" th:href="@{/admin/equipment/new}">Добавить</a>
+    </header>
+
+    <div class="empty" th:if="${equipment.empty}">
+        Оборудование не добавлено
+    </div>
+
+    <table th:if="${!equipment.empty}">
+        <thead>
+        <tr>
+            <th>Название</th>
+            <th>Описание</th>
+            <th>Статус</th>
+            <th>Действия</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="item : ${equipment}">
+            <td th:text="${item.name}">Проектор</td>
+            <td th:text="${item.description ?: '-'}">-</td>
+            <td>
+                <span class="status" th:text="${item.active ? 'Активно' : 'Отключено'}">Активно</span>
+            </td>
+            <td>
+                <div class="actions">
+                    <a th:href="@{/admin/equipment/{id}/edit(id=${item.id})}">Редактировать</a>
+                    <form th:if="${item.active}"
+                          th:action="@{/admin/equipment/{id}/deactivate(id=${item.id})}"
+                          method="post">
+                        <button type="submit">Отключить</button>
+                    </form>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</main>
+</body>
+</html>
