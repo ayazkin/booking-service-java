@@ -2,6 +2,8 @@ package com.booking.javaproject.booking.controller;
 
 import com.booking.javaproject.booking.service.BookingService;
 import com.booking.javaproject.room.service.RoomService;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,6 +26,16 @@ public class BookingController {
     public BookingController(BookingService bookingService, RoomService roomService) {
         this.bookingService = bookingService;
         this.roomService = roomService;
+    }
+
+    @GetMapping("/my")
+    public String myBookings(
+            @PageableDefault(size = 10) Pageable pageable,
+            Principal principal,
+            Model model
+    ) {
+        model.addAttribute("bookingsPage", bookingService.findCurrentUserBookings(principal, pageable));
+        return "bookings/my";
     }
 
     @GetMapping("/new")

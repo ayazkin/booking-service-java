@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мои брони</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            color: #1f2937;
+            background: #f6f7f9;
+        }
+
+        main {
+            max-width: 1120px;
+            margin: 0 auto;
+            padding: 32px 20px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            gap: 16px;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 32px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #ffffff;
+            border: 1px solid #d7dce2;
+        }
+
+        th,
+        td {
+            padding: 14px 16px;
+            border-bottom: 1px solid #e5e7eb;
+            text-align: left;
+            vertical-align: top;
+        }
+
+        th {
+            background: #eef2f7;
+            font-size: 14px;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        a {
+            display: inline-block;
+            padding: 9px 12px;
+            border: 1px solid #cfd6df;
+            color: #1f2937;
+            background: #ffffff;
+            text-decoration: none;
+        }
+
+        .primary {
+            border-color: #111827;
+            background: #111827;
+            color: #ffffff;
+        }
+
+        .empty {
+            padding: 18px;
+            background: #ffffff;
+            border: 1px solid #d7dce2;
+        }
+
+        .pagination {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .pagination a,
+        .pagination span {
+            min-width: 40px;
+            padding: 9px 12px;
+            box-sizing: border-box;
+            border: 1px solid #cfd6df;
+            color: #1f2937;
+            background: #ffffff;
+            text-align: center;
+            text-decoration: none;
+        }
+
+        .pagination .current {
+            border-color: #111827;
+            background: #111827;
+            color: #ffffff;
+        }
+
+        .pagination .disabled {
+            color: #8a94a3;
+            background: #eef2f7;
+        }
+    </style>
+</head>
+<body>
+<main>
+    <header>
+        <h1>Мои брони</h1>
+        <a class="primary" th:href="@{/bookings/new}">Новая бронь</a>
+    </header>
+
+    <div class="empty" th:if="${bookingsPage.empty}">
+        У вас пока нет бронирований
+    </div>
+
+    <table th:if="${!bookingsPage.empty}">
+        <thead>
+        <tr>
+            <th>Аудитория</th>
+            <th>Начало</th>
+            <th>Окончание</th>
+            <th>Статус</th>
+            <th>Комментарий</th>
+            <th>Комментарий администратора</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="booking : ${bookingsPage.content}">
+            <td th:text="${booking.room.number + ' - ' + booking.room.name}">101 - Лекционная аудитория</td>
+            <td th:text="${booking.startTime}">2026-05-14T10:00</td>
+            <td th:text="${booking.endTime}">2026-05-14T12:00</td>
+            <td th:text="${booking.status}">PENDING</td>
+            <td th:text="${booking.comment ?: '-'}">-</td>
+            <td th:text="${booking.adminComment ?: '-'}">-</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <nav class="pagination" th:if="${bookingsPage.totalPages > 1}" aria-label="Пагинация">
+        <a th:if="${bookingsPage.hasPrevious()}"
+           th:href="@{/bookings/my(page=${bookingsPage.number - 1},size=${bookingsPage.size})}">
+            Назад
+        </a>
+        <span class="disabled" th:if="${!bookingsPage.hasPrevious()}">Назад</span>
+
+        <span th:each="pageNumber : ${#numbers.sequence(0, bookingsPage.totalPages - 1)}">
+            <span class="current"
+                  th:if="${pageNumber == bookingsPage.number}"
+                  th:text="${pageNumber + 1}">1</span>
+            <a th:if="${pageNumber != bookingsPage.number}"
+               th:href="@{/bookings/my(page=${pageNumber},size=${bookingsPage.size})}"
+               th:text="${pageNumber + 1}">2</a>
+        </span>
+
+        <a th:if="${bookingsPage.hasNext()}"
+           th:href="@{/bookings/my(page=${bookingsPage.number + 1},size=${bookingsPage.size})}">
+            Вперед
+        </a>
+        <span class="disabled" th:if="${!bookingsPage.hasNext()}">Вперед</span>
+    </nav>
+</main>
+</body>
+</html>

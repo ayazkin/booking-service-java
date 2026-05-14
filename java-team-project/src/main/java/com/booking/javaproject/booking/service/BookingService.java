@@ -7,6 +7,8 @@ import com.booking.javaproject.room.model.Room;
 import com.booking.javaproject.room.repository.RoomRepository;
 import com.booking.javaproject.user.model.User;
 import com.booking.javaproject.user.repository.UserRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -55,6 +57,12 @@ public class BookingService {
         booking.setStatus(BookingStatus.APPROVED);
         booking.setComment(normalizeComment(comment));
         return bookingRepository.save(booking);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<Booking> findCurrentUserBookings(Principal principal, Pageable pageable) {
+        User user = findCurrentUser(principal);
+        return bookingRepository.findByUserIdOrderByStartTimeDesc(user.getId(), pageable);
     }
 
     private User findCurrentUser(Principal principal) {
