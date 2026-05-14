@@ -52,6 +52,7 @@ public class BookingService {
         validateRoomAvailability(room.getId(), startTime, endTime);
 
         Booking booking = new Booking(user, room, startTime, endTime);
+        booking.setStatus(BookingStatus.APPROVED);
         booking.setComment(normalizeComment(comment));
         return bookingRepository.save(booking);
     }
@@ -75,7 +76,7 @@ public class BookingService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Выберите аудиторию");
         }
 
-        Room room = roomRepository.findById(roomId)
+        Room room = roomRepository.findByIdForUpdate(roomId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Аудитория не найдена"));
         if (!room.isActive()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Аудитория отключена");
