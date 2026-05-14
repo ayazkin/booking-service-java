@@ -13,6 +13,8 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
 
     List<Room> findAllByOrderByNumberAsc();
 
+    List<Room> findAllByActiveTrueOrderByNumberAsc();
+
     Page<Room> findByActiveTrue(Pageable pageable);
 
     boolean existsByNumber(String number);

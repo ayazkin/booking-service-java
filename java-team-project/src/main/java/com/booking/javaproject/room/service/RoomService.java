@@ -35,6 +35,11 @@ public class RoomService {
     }
 
     @Transactional(readOnly = true)
+    public List<Room> findActive() {
+        return roomRepository.findAllByActiveTrueOrderByNumberAsc();
+    }
+
+    @Transactional(readOnly = true)
     public Room findById(Long id) {
         Room room = roomRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Аудитория не найдена"));
