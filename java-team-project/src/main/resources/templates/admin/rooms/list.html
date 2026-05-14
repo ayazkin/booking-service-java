@@ -1,101 +1,14 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ru" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Аудитории</title>
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            color: #1f2937;
-            background: #f6f7f9;
-        }
-
-        main {
-            max-width: 1180px;
-            margin: 0 auto;
-            padding: 32px 20px;
-        }
-
-        header {
-            display: flex;
-            justify-content: space-between;
-            gap: 16px;
-            align-items: center;
-            margin-bottom: 24px;
-        }
-
-        h1 {
-            margin: 0;
-            font-size: 32px;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            background: #ffffff;
-            border: 1px solid #d7dce2;
-        }
-
-        th,
-        td {
-            padding: 14px 16px;
-            border-bottom: 1px solid #e5e7eb;
-            text-align: left;
-            vertical-align: top;
-        }
-
-        th {
-            background: #eef2f7;
-            font-size: 14px;
-        }
-
-        tr:last-child td {
-            border-bottom: none;
-        }
-
-        a,
-        button {
-            display: inline-block;
-            padding: 9px 12px;
-            border: 1px solid #cfd6df;
-            color: #1f2937;
-            background: #ffffff;
-            font: inherit;
-            text-decoration: none;
-            cursor: pointer;
-        }
-
-        .primary {
-            border-color: #111827;
-            background: #111827;
-            color: #ffffff;
-        }
-
-        .actions {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-
-        .status {
-            font-weight: 700;
-        }
-
-        .empty {
-            padding: 18px;
-            background: #ffffff;
-            border: 1px solid #d7dce2;
-        }
-    </style>
+<head th:replace="~{fragments/head :: head(title='Аудитории')}">
 </head>
 <body>
+<div th:replace="~{fragments/header :: header}"></div>
 <main>
-    <header>
+    <div class="admin-page-header">
         <h1>Аудитории</h1>
-        <a class="primary" th:href="@{/admin/rooms/new}">Добавить</a>
-    </header>
+        <a class="btn primary" th:href="@{/admin/rooms/new}">Добавить</a>
+    </div>
 
     <div class="empty" th:if="${rooms.empty}">
         Аудитории не добавлены
@@ -130,11 +43,11 @@
             </td>
             <td>
                 <div class="actions">
-                    <a th:href="@{/admin/rooms/{id}/edit(id=${room.id})}">Редактировать</a>
+                    <a class="btn" th:href="@{/admin/rooms/{id}/edit(id=${room.id})}">Редактировать</a>
                     <form th:if="${room.active}"
                           th:action="@{/admin/rooms/{id}/deactivate(id=${room.id})}"
-                          method="post">
-                        <button type="submit">Отключить</button>
+                          method="post" style="display: inline;">
+                        <button class="btn" type="submit">Отключить</button>
                     </form>
                 </div>
             </td>
