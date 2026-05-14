@@ -1,0 +1,35 @@
+﻿<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Главная страница')}"></head>
+<body>
+<header th:replace="~{fragments/header :: header}"></header>
+
+<main>
+    <div class="hero">
+        <h1>Добро пожаловать в BookingService</h1>
+        <p>Удобный сервис для бронирования аудиторий и управления оборудованием.</p>
+        <div class="actions">
+            <a th:href="@{/rooms}" class="btn primary">Просмотреть аудитории</a>
+        </div>
+    </div>
+
+    <section class="features">
+        <h2>Наши возможности</h2>
+        <div class="feature-list">
+            <div class="feature-item">
+                <h3>Просмотр аудиторий</h3>
+                <p>Изучите список доступных помещений с их характеристиками.</p>
+            </div>
+            <div class="feature-item">
+                <h3>Бронирование</h3>
+                <p>Выбирайте подходящее время и бронируйте аудитории онлайн.</p>
+            </div>
+            <div class="feature-item">
+                <h3>Оборудование</h3>
+                <p>Администрируйте парк оборудования и его распределение по кабинетам.</p>
+            </div>
+        </div>
+    </section>
+</main>
+</body>
+</html>
