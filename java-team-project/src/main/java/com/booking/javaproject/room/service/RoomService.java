@@ -36,7 +36,9 @@ public class RoomService {
 
     @Transactional(readOnly = true)
     public List<Room> findActive() {
-        return roomRepository.findAllByActiveTrueOrderByNumberAsc();
+        List<Room> rooms = roomRepository.findAllByActiveTrueOrderByNumberAsc();
+        initializeEquipment(rooms);
+        return rooms;
     }
 
     @Transactional(readOnly = true)
