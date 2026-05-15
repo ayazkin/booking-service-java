@@ -63,6 +63,7 @@
             <th>Этаж</th>
             <th>Оборудование</th>
             <th>Описание</th>
+            <th>Бронь</th>
         </tr>
         </thead>
         <tbody>
@@ -78,6 +79,14 @@
                 </span>
             </td>
             <td th:text="${room.description ?: '-'}">-</td>
+            <td>
+                <a class="button-link"
+                   th:if="${room.active}"
+                   th:href="@{/bookings/new(roomId=${room.id})}">
+                    Забронировать
+                </a>
+                <span th:if="${!room.active}">Недоступна</span>
+            </td>
         </tr>
         </tbody>
     </table>
