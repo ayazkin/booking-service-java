@@ -8,10 +8,12 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
 import java.time.LocalDateTime;
@@ -36,6 +38,22 @@ public class BookingController {
     ) {
         model.addAttribute("bookingsPage", bookingService.findCurrentUserBookings(principal, pageable));
         return "bookings/my";
+    }
+
+    @PostMapping("/{id}/cancel")
+    public String cancelBooking(
+            @PathVariable Long id,
+            Principal principal,
+            RedirectAttributes redirectAttributes
+    ) {
+        try {
+            bookingService.cancelCurrentUserBooking(principal, id);
+            redirectAttributes.addFlashAttribute("success", "Бронь отменена");
+        } catch (ResponseStatusException exception) {
+            redirectAttributes.addFlashAttribute("error", exception.getReason());
+        }
+
+        return "redirect:/bookings/my";
     }
 
     @GetMapping("/new")

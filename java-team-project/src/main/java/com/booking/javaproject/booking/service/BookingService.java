@@ -65,6 +65,19 @@ public class BookingService {
         return bookingRepository.findByUserIdOrderByStartTimeDesc(user.getId(), pageable);
     }
 
+    @Transactional
+    public void cancelCurrentUserBooking(Principal principal, Long bookingId) {
+        User user = findCurrentUser(principal);
+        Booking booking = bookingRepository.findByIdAndUserId(bookingId, user.getId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Бронь не найдена"));
+
+        if (!isActiveBookingStatus(booking.getStatus())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Отменить можно только активную бронь");
+        }
+
+        booking.setStatus(BookingStatus.CANCELED);
+    }
+
     private User findCurrentUser(Principal principal) {
         if (principal == null || principal.getName() == null || principal.getName().isBlank()) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Требуется авторизация");
@@ -111,6 +124,10 @@ public class BookingService {
         if (roomBusy) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "На это время аудитория уже занята");
         }
+    }
+
+    private boolean isActiveBookingStatus(BookingStatus status) {
+        return status == BookingStatus.PENDING || status == BookingStatus.APPROVED;
     }
 
     private String normalizeComment(String comment) {

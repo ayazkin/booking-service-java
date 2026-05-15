@@ -55,13 +55,16 @@
             border-bottom: none;
         }
 
-        a {
+        a,
+        button {
             display: inline-block;
             padding: 9px 12px;
             border: 1px solid #cfd6df;
             color: #1f2937;
             background: #ffffff;
+            font: inherit;
             text-decoration: none;
+            cursor: pointer;
         }
 
         .primary {
@@ -74,6 +77,28 @@
             padding: 18px;
             background: #ffffff;
             border: 1px solid #d7dce2;
+        }
+
+        .actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .error {
+            margin-bottom: 16px;
+            padding: 12px;
+            background: #fff1f2;
+            border: 1px solid #fda4af;
+            color: #9f1239;
+        }
+
+        .success {
+            margin-bottom: 16px;
+            padding: 12px;
+            background: #ecfdf5;
+            border: 1px solid #86efac;
+            color: #166534;
         }
 
         .pagination {
@@ -115,6 +140,9 @@
         <a class="primary" th:href="@{/bookings/new}">Новая бронь</a>
     </header>
 
+    <div class="success" th:if="${success}" th:text="${success}">Бронь отменена</div>
+    <div class="error" th:if="${error}" th:text="${error}">Ошибка</div>
+
     <div class="empty" th:if="${bookingsPage.empty}">
         У вас пока нет бронирований
     </div>
@@ -128,6 +156,7 @@
             <th>Статус</th>
             <th>Комментарий</th>
             <th>Комментарий администратора</th>
+            <th>Действия</th>
         </tr>
         </thead>
         <tbody>
@@ -138,6 +167,16 @@
             <td th:text="${booking.status}">PENDING</td>
             <td th:text="${booking.comment ?: '-'}">-</td>
             <td th:text="${booking.adminComment ?: '-'}">-</td>
+            <td>
+                <div class="actions">
+                    <form th:if="${booking.status.name() == 'PENDING' or booking.status.name() == 'APPROVED'}"
+                          th:action="@{/bookings/{id}/cancel(id=${booking.id})}"
+                          method="post">
+                        <button type="submit">Отменить</button>
+                    </form>
+                    <span th:if="${booking.status.name() != 'PENDING' and booking.status.name() != 'APPROVED'}">-</span>
+                </div>
+            </td>
         </tr>
         </tbody>
     </table>
