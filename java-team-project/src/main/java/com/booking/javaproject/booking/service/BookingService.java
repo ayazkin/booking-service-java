@@ -65,6 +65,25 @@ public class BookingService {
         return bookingRepository.findByUserIdOrderByStartTimeDesc(user.getId(), pageable);
     }
 
+    @Transactional(readOnly = true)
+    public Page<Booking> searchBookings(
+            BookingStatus status,
+            Long roomId,
+            String userQuery,
+            LocalDateTime startFrom,
+            LocalDateTime startTo,
+            Pageable pageable
+    ) {
+        return bookingRepository.search(
+                status,
+                roomId,
+                normalizeQuery(userQuery),
+                startFrom,
+                startTo,
+                pageable
+        );
+    }
+
     @Transactional
     public void cancelCurrentUserBooking(Principal principal, Long bookingId) {
         User user = findCurrentUser(principal);
@@ -128,6 +147,13 @@ public class BookingService {
 
     private boolean isActiveBookingStatus(BookingStatus status) {
         return status == BookingStatus.PENDING || status == BookingStatus.APPROVED;
+    }
+
+    private String normalizeQuery(String query) {
+        if (query == null || query.isBlank()) {
+            return null;
+        }
+        return query.trim();
     }
 
     private String normalizeComment(String comment) {

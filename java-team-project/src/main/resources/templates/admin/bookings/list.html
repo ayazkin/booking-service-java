@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Бронирования</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            color: #1f2937;
+            background: #f6f7f9;
+        }
+
+        main {
+            max-width: 1220px;
+            margin: 0 auto;
+            padding: 32px 20px;
+        }
+
+        h1 {
+            margin: 0 0 24px;
+            font-size: 32px;
+        }
+
+        .filters {
+            display: grid;
+            grid-template-columns: minmax(150px, 1fr) minmax(180px, 1.4fr) minmax(170px, 1.3fr) repeat(2, minmax(170px, 1.2fr));
+            gap: 14px;
+            align-items: end;
+            margin-bottom: 20px;
+            padding: 16px;
+            background: #ffffff;
+            border: 1px solid #d7dce2;
+        }
+
+        label {
+            display: grid;
+            gap: 6px;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        input,
+        select {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 10px 12px;
+            border: 1px solid #cfd6df;
+            font: inherit;
+            background: #ffffff;
+        }
+
+        .filter-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        a,
+        button {
+            display: inline-block;
+            padding: 10px 12px;
+            border: 1px solid #cfd6df;
+            color: #1f2937;
+            background: #ffffff;
+            font: inherit;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .primary {
+            border-color: #111827;
+            background: #111827;
+            color: #ffffff;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #ffffff;
+            border: 1px solid #d7dce2;
+        }
+
+        th,
+        td {
+            padding: 14px 16px;
+            border-bottom: 1px solid #e5e7eb;
+            text-align: left;
+            vertical-align: top;
+        }
+
+        th {
+            background: #eef2f7;
+            font-size: 14px;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .empty {
+            padding: 18px;
+            background: #ffffff;
+            border: 1px solid #d7dce2;
+        }
+
+        .pagination {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .pagination a,
+        .pagination span {
+            min-width: 40px;
+            padding: 9px 12px;
+            box-sizing: border-box;
+            border: 1px solid #cfd6df;
+            color: #1f2937;
+            background: #ffffff;
+            text-align: center;
+            text-decoration: none;
+        }
+
+        .pagination .current {
+            border-color: #111827;
+            background: #111827;
+            color: #ffffff;
+        }
+
+        .pagination .disabled {
+            color: #8a94a3;
+            background: #eef2f7;
+        }
+
+        @media (max-width: 980px) {
+            .filters {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+<main>
+    <h1>Бронирования</h1>
+
+    <form class="filters" th:action="@{/admin/bookings}" method="get">
+        <input type="hidden" name="size" th:value="${bookingsPage.size}">
+
+        <label>
+            Статус
+            <select name="status">
+                <option value="">Любой</option>
+                <option th:each="item : ${statuses}"
+                        th:value="${item}"
+                        th:text="${item}"
+                        th:selected="${status != null and item == status}">
+                    APPROVED
+                </option>
+            </select>
+        </label>
+
+        <label>
+            Аудитория
+            <select name="roomId">
+                <option value="">Любая</option>
+                <option th:each="room : ${rooms}"
+                        th:value="${room.id}"
+                        th:text="${room.number + ' - ' + room.name}"
+                        th:selected="${roomId != null and room.id == roomId}">
+                    101 - Лекционная аудитория
+                </option>
+            </select>
+        </label>
+
+        <label>
+            Пользователь
+            <input type="text" name="userQuery" th:value="${userQuery}">
+        </label>
+
+        <label>
+            Начало от
+            <input type="datetime-local" name="startFrom" th:value="${startFrom}">
+        </label>
+
+        <label>
+            Начало до
+            <input type="datetime-local" name="startTo" th:value="${startTo}">
+        </label>
+
+        <div class="filter-actions">
+            <button class="primary" type="submit">Найти</button>
+            <a th:href="@{/admin/bookings}">Сбросить</a>
+        </div>
+    </form>
+
+    <div class="empty" th:if="${bookingsPage.empty}">
+        Бронирования не найдены
+    </div>
+
+    <table th:if="${!bookingsPage.empty}">
+        <thead>
+        <tr>
+            <th>Пользователь</th>
+            <th>Аудитория</th>
+            <th>Начало</th>
+            <th>Окончание</th>
+            <th>Статус</th>
+            <th>Комментарий</th>
+            <th>Комментарий администратора</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="booking : ${bookingsPage.content}">
+            <td>
+                <span th:text="${booking.user.username}">user</span><br>
+                <span th:text="${booking.user.email}">user@example.com</span>
+            </td>
+            <td th:text="${booking.room.number + ' - ' + booking.room.name}">101 - Лекционная аудитория</td>
+            <td th:text="${booking.startTime}">2026-05-15T10:00</td>
+            <td th:text="${booking.endTime}">2026-05-15T12:00</td>
+            <td th:text="${booking.status}">APPROVED</td>
+            <td th:text="${booking.comment ?: '-'}">-</td>
+            <td th:text="${booking.adminComment ?: '-'}">-</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <nav class="pagination" th:if="${bookingsPage.totalPages > 1}" aria-label="Пагинация">
+        <a th:if="${bookingsPage.hasPrevious()}"
+           th:href="@{/admin/bookings(page=${bookingsPage.number - 1},size=${bookingsPage.size},status=${status},roomId=${roomId},userQuery=${userQuery},startFrom=${startFrom},startTo=${startTo})}">
+            Назад
+        </a>
+        <span class="disabled" th:if="${!bookingsPage.hasPrevious()}">Назад</span>
+
+        <span th:each="pageNumber : ${#numbers.sequence(0, bookingsPage.totalPages - 1)}">
+            <span class="current"
+                  th:if="${pageNumber == bookingsPage.number}"
+                  th:text="${pageNumber + 1}">1</span>
+            <a th:if="${pageNumber != bookingsPage.number}"
+               th:href="@{/admin/bookings(page=${pageNumber},size=${bookingsPage.size},status=${status},roomId=${roomId},userQuery=${userQuery},startFrom=${startFrom},startTo=${startTo})}"
+               th:text="${pageNumber + 1}">2</a>
+        </span>
+
+        <a th:if="${bookingsPage.hasNext()}"
+           th:href="@{/admin/bookings(page=${bookingsPage.number + 1},size=${bookingsPage.size},status=${status},roomId=${roomId},userQuery=${userQuery},startFrom=${startFrom},startTo=${startTo})}">
+            Вперед
+        </a>
+        <span class="disabled" th:if="${!bookingsPage.hasNext()}">Вперед</span>
+    </nav>
+</main>
+</body>
+</html>
