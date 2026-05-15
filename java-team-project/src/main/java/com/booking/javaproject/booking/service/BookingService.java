@@ -97,6 +97,19 @@ public class BookingService {
         booking.setStatus(BookingStatus.CANCELED);
     }
 
+    @Transactional
+    public void cancelBookingByAdmin(Long bookingId, String adminComment) {
+        Booking booking = bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Бронь не найдена"));
+
+        if (!isActiveBookingStatus(booking.getStatus())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Отменить можно только активную бронь");
+        }
+
+        booking.setStatus(BookingStatus.CANCELED);
+        booking.setAdminComment(normalizeRequiredAdminComment(adminComment));
+    }
+
     private User findCurrentUser(Principal principal) {
         if (principal == null || principal.getName() == null || principal.getName().isBlank()) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Требуется авторизация");
@@ -161,5 +174,12 @@ public class BookingService {
             return null;
         }
         return comment.trim();
+    }
+
+    private String normalizeRequiredAdminComment(String adminComment) {
+        if (adminComment == null || adminComment.isBlank()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Укажите комментарий администратора");
+        }
+        return adminComment.trim();
     }
 }

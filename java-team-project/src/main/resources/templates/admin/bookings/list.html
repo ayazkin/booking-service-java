@@ -42,13 +42,19 @@
         }
 
         input,
-        select {
+        select,
+        textarea {
             width: 100%;
             box-sizing: border-box;
             padding: 10px 12px;
             border: 1px solid #cfd6df;
             font: inherit;
             background: #ffffff;
+        }
+
+        textarea {
+            min-height: 74px;
+            resize: vertical;
         }
 
         .filter-actions {
@@ -105,6 +111,32 @@
             border: 1px solid #d7dce2;
         }
 
+        .actions {
+            display: grid;
+            gap: 8px;
+        }
+
+        .error {
+            margin-bottom: 16px;
+            padding: 12px;
+            background: #fff1f2;
+            border: 1px solid #fda4af;
+            color: #9f1239;
+        }
+
+        .success {
+            margin-bottom: 16px;
+            padding: 12px;
+            background: #ecfdf5;
+            border: 1px solid #86efac;
+            color: #166534;
+        }
+
+        .cancel-form {
+            display: grid;
+            gap: 8px;
+        }
+
         .pagination {
             display: flex;
             flex-wrap: wrap;
@@ -146,6 +178,9 @@
 <body>
 <main>
     <h1>Бронирования</h1>
+
+    <div class="success" th:if="${success}" th:text="${success}">Бронь отменена</div>
+    <div class="error" th:if="${error}" th:text="${error}">Ошибка</div>
 
     <form class="filters" th:action="@{/admin/bookings}" method="get">
         <input type="hidden" name="size" th:value="${bookingsPage.size}">
@@ -211,6 +246,7 @@
             <th>Статус</th>
             <th>Комментарий</th>
             <th>Комментарий администратора</th>
+            <th>Действия</th>
         </tr>
         </thead>
         <tbody>
@@ -225,6 +261,18 @@
             <td th:text="${booking.status}">APPROVED</td>
             <td th:text="${booking.comment ?: '-'}">-</td>
             <td th:text="${booking.adminComment ?: '-'}">-</td>
+            <td>
+                <div class="actions">
+                    <form class="cancel-form"
+                          th:if="${booking.status.name() == 'PENDING' or booking.status.name() == 'APPROVED'}"
+                          th:action="@{/admin/bookings/{id}/cancel(id=${booking.id})}"
+                          method="post">
+                        <textarea name="adminComment" required maxlength="1000" placeholder="Комментарий администратора"></textarea>
+                        <button type="submit">Отменить</button>
+                    </form>
+                    <span th:if="${booking.status.name() != 'PENDING' and booking.status.name() != 'APPROVED'}">-</span>
+                </div>
+            </td>
         </tr>
         </tbody>
     </table>
