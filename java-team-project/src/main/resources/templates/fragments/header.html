@@ -7,16 +7,16 @@
         <nav class="main-nav">
             <a th:href="@{/}" class="nav-link">Главная</a>
             <a th:href="@{/rooms}" class="nav-link">Аудитории</a>
+            <a th:href="@{/bookings/my}" sec:authorize="isAuthenticated()" class="nav-link">Мои брони</a>
 
             <div class="nav-separator"></div>
 
-            <!-- Ссылки для админа -->
             <div sec:authorize="hasRole('ADMIN')" class="admin-links">
-                <a th:href="@{/admin/rooms}" class="nav-link admin">Админка (Аудитории)</a>
-                <a th:href="@{/admin/equipment}" class="nav-link admin">Админка (Оборудование)</a>
+                <a th:href="@{/admin/rooms}" class="nav-link admin">Аудитории</a>
+                <a th:href="@{/admin/equipment}" class="nav-link admin">Оборудование</a>
+                <a th:href="@{/admin/bookings}" class="nav-link admin">Бронирования</a>
             </div>
 
-            <!-- Ссылки авторизации -->
             <div class="auth-links">
                 <div sec:authorize="isAnonymous()">
                     <a th:href="@{/login}" class="nav-link">Войти</a>
@@ -31,7 +31,6 @@
             </div>
         </nav>
     </div>
-
-    </header>
-    </body>
-    </html>
+</header>
+</body>
+</html>

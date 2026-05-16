@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Регистрация')}"></head>
+<body>
+<header th:replace="~{fragments/header :: header}"></header>
+
+<main class="auth-page">
+    <section class="auth-panel">
+        <h1>Регистрация</h1>
+
+        <form th:action="@{/register}" th:object="${registerRequest}" method="post" class="form">
+            <input type="hidden"
+                   th:if="${_csrf != null}"
+                   th:name="${_csrf.parameterName}"
+                   th:value="${_csrf.token}">
+
+            <div class="error" th:if="${#fields.hasGlobalErrors()}">
+                <p th:each="error : ${#fields.globalErrors()}" th:text="${error}">Ошибка регистрации</p>
+            </div>
+
+            <label>
+                Email
+                <input type="email" th:field="*{email}" required autocomplete="username">
+                <span class="field-error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Ошибка</span>
+            </label>
+
+            <label>
+                Имя
+                <input type="text" th:field="*{firstName}" required autocomplete="given-name">
+                <span class="field-error" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}">Ошибка</span>
+            </label>
+
+            <label>
+                Фамилия
+                <input type="text" th:field="*{lastName}" required autocomplete="family-name">
+                <span class="field-error" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">Ошибка</span>
+            </label>
+
+            <label>
+                Телефон
+                <input type="text" th:field="*{phone}" autocomplete="tel">
+                <span class="field-error" th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}">Ошибка</span>
+            </label>
+
+            <label>
+                Пароль
+                <input type="password" th:field="*{password}" required autocomplete="new-password">
+                <span class="field-error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Ошибка</span>
+            </label>
+
+            <label>
+                Повторите пароль
+                <input type="password" th:field="*{confirmPassword}" required autocomplete="new-password">
+                <span class="field-error"
+                      th:if="${#fields.hasErrors('confirmPassword')}"
+                      th:errors="*{confirmPassword}">Ошибка</span>
+                <span class="field-error"
+                      th:if="${#fields.hasErrors('passwordConfirmed')}"
+                      th:errors="*{passwordConfirmed}">Ошибка</span>
+            </label>
+
+            <button class="primary" type="submit">Зарегистрироваться</button>
+        </form>
+
+        <p class="auth-note">
+            Уже есть аккаунт? <a th:href="@{/login}">Войти</a>
+        </p>
+    </section>
+</main>
+</body>
+</html>

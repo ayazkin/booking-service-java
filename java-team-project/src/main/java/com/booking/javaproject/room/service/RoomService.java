@@ -133,7 +133,7 @@ public class RoomService {
 
     private String normalizeQuery(String query) {
         if (query == null || query.isBlank()) {
-            return null;
+            return "";
         }
         return query.trim();
     }
