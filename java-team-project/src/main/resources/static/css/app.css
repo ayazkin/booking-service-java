@@ -352,6 +352,53 @@ select[multiple] {
     margin: 0;
 }
 
+/* Auth */
+.auth-page {
+    max-width: 520px;
+}
+
+.auth-panel {
+    background: #ffffff;
+    border: 1px solid #d7dce2;
+    padding: 24px;
+}
+
+.auth-panel h1 {
+    margin-top: 0;
+}
+
+.auth-note {
+    margin: 18px 0 0;
+    color: #4b5563;
+}
+
+.error,
+.field-error {
+    color: #9f1239;
+}
+
+.error,
+.success {
+    padding: 12px;
+    margin-bottom: 16px;
+    border: 1px solid;
+}
+
+.error {
+    background: #fff1f2;
+    border-color: #fda4af;
+}
+
+.success {
+    background: #ecfdf5;
+    border-color: #86efac;
+    color: #166534;
+}
+
+.field-error {
+    font-weight: 400;
+}
+
 /* Responsive */
 @media (max-width: 800px) {
     .filters {

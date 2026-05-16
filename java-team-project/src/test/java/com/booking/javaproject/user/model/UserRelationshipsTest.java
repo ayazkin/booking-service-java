@@ -45,9 +45,14 @@ class UserRelationshipsTest {
 
         assertThat(savedUser.getProfile()).isNotNull();
         assertThat(savedUser.getProfile().getUser()).isSameAs(savedUser);
+        assertThat(savedUser.getProfile().getFirstName()).isEqualTo("Ivan");
+        assertThat(savedUser.getProfile().getLastName()).isEqualTo("Petrov");
         assertThat(savedUser.getRoles())
                 .extracting(Role::getName)
                 .containsExactlyInAnyOrder("ROLE_ADMIN", "ROLE_MANAGER");
+        assertThat(savedUser.isEnabled()).isTrue();
+        assertThat(savedUser.getCreatedAt()).isNotNull();
+        assertThat(savedUser.getUpdatedAt()).isNotNull();
 
         Set<String> adminUsers = admin.getUsers().stream()
                 .map(User::getUsername)

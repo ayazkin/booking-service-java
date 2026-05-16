@@ -27,6 +27,12 @@ public class UserProfile {
     @Column(length = 30)
     private String phone;
 
+    @Column(length = 80)
+    private String groupName;
+
+    @Column(length = 120)
+    private String department;
+
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false, unique = true)
     private User user;
@@ -66,6 +72,22 @@ public class UserProfile {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public String getGroupName() {
+        return groupName;
+    }
+
+    public void setGroupName(String groupName) {
+        this.groupName = groupName;
+    }
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
     }
 
     public User getUser() {
