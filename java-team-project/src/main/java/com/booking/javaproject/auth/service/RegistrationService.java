@@ -1,8 +1,6 @@
 package com.booking.javaproject.auth.service;
 
 import com.booking.javaproject.auth.dto.RegisterRequest;
-import com.booking.javaproject.auth.model.Role;
-import com.booking.javaproject.auth.repository.RoleRepository;
 import com.booking.javaproject.user.model.User;
 import com.booking.javaproject.user.model.UserProfile;
 import com.booking.javaproject.user.repository.UserRepository;
@@ -15,19 +13,19 @@ import java.util.Locale;
 @Service
 public class RegistrationService {
 
-    public static final String USER_ROLE = "ROLE_USER";
+    public static final String USER_ROLE = RoleService.USER_ROLE;
 
     private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
+    private final RoleService roleService;
     private final PasswordEncoder passwordEncoder;
 
     public RegistrationService(
             UserRepository userRepository,
-            RoleRepository roleRepository,
+            RoleService roleService,
             PasswordEncoder passwordEncoder
     ) {
         this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
+        this.roleService = roleService;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -47,14 +45,9 @@ public class RegistrationService {
                 normalizeRequired(request.getLastName()),
                 normalizeOptional(request.getPhone())
         ));
-        user.addRole(findOrCreateUserRole());
+        user.addRole(roleService.findOrCreateUserRole());
 
         return userRepository.save(user);
-    }
-
-    private Role findOrCreateUserRole() {
-        return roleRepository.findByName(USER_ROLE)
-                .orElseGet(() -> roleRepository.save(new Role(USER_ROLE)));
     }
 
     private String normalizeEmail(String email) {
