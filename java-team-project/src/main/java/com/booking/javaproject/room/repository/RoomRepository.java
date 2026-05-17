@@ -23,9 +23,9 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
             select distinct r
             from Room r
             left join r.equipment e
-            where (:query is null
-                or lower(r.number) like lower(concat('%', :query, '%'))
-                or lower(r.name) like lower(concat('%', :query, '%')))
+            where (:query = ''
+                or lower(r.number) like concat('%', :query, '%')
+                or lower(r.name) like concat('%', :query, '%'))
               and (:minCapacity is null or r.capacity >= :minCapacity)
               and (:floor is null or r.floor = :floor)
               and (:equipmentId is null or e.id = :equipmentId)
