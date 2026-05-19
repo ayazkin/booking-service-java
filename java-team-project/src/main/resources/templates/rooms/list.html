@@ -39,6 +39,16 @@
             </select>
         </label>
 
+        <label>
+            Свободна с
+            <input type="datetime-local" name="startTime" th:value="${startTime}">
+        </label>
+
+        <label>
+            Свободна до
+            <input type="datetime-local" name="endTime" th:value="${endTime}">
+        </label>
+
         <label class="checkbox">
             <input type="checkbox" name="activeOnly" value="true" th:checked="${activeOnly}">
             Только активные
@@ -82,7 +92,7 @@
             <td>
                 <a class="button-link"
                    th:if="${room.active}"
-                   th:href="@{/bookings/new(roomId=${room.id})}">
+                   th:href="@{/bookings/new(roomId=${room.id},startTime=${startTime},endTime=${endTime})}">
                     Забронировать
                 </a>
                 <span th:if="${!room.active}">Недоступна</span>
@@ -93,7 +103,7 @@
 
     <nav class="pagination" th:if="${roomsPage.totalPages > 1}" aria-label="Пагинация">
         <a th:if="${roomsPage.hasPrevious()}"
-           th:href="@{/rooms(page=${roomsPage.number - 1},size=${roomsPage.size},query=${query},minCapacity=${minCapacity},floor=${floor},equipmentId=${equipmentId},activeOnly=${activeOnly},filter='true')}">
+           th:href="@{/rooms(page=${roomsPage.number - 1},size=${roomsPage.size},query=${query},minCapacity=${minCapacity},floor=${floor},equipmentId=${equipmentId},startTime=${startTime},endTime=${endTime},activeOnly=${activeOnly},filter='true')}">
             Назад
         </a>
         <span class="disabled" th:if="${!roomsPage.hasPrevious()}">Назад</span>
@@ -103,12 +113,12 @@
                   th:if="${pageNumber == roomsPage.number}"
                   th:text="${pageNumber + 1}">1</span>
             <a th:if="${pageNumber != roomsPage.number}"
-               th:href="@{/rooms(page=${pageNumber},size=${roomsPage.size},query=${query},minCapacity=${minCapacity},floor=${floor},equipmentId=${equipmentId},activeOnly=${activeOnly},filter='true')}"
+               th:href="@{/rooms(page=${pageNumber},size=${roomsPage.size},query=${query},minCapacity=${minCapacity},floor=${floor},equipmentId=${equipmentId},startTime=${startTime},endTime=${endTime},activeOnly=${activeOnly},filter='true')}"
                th:text="${pageNumber + 1}">2</a>
         </span>
 
         <a th:if="${roomsPage.hasNext()}"
-           th:href="@{/rooms(page=${roomsPage.number + 1},size=${roomsPage.size},query=${query},minCapacity=${minCapacity},floor=${floor},equipmentId=${equipmentId},activeOnly=${activeOnly},filter='true')}">
+           th:href="@{/rooms(page=${roomsPage.number + 1},size=${roomsPage.size},query=${query},minCapacity=${minCapacity},floor=${floor},equipmentId=${equipmentId},startTime=${startTime},endTime=${endTime},activeOnly=${activeOnly},filter='true')}">
             Вперед
         </a>
         <span class="disabled" th:if="${!roomsPage.hasNext()}">Вперед</span>
