@@ -9,6 +9,14 @@
         <h1>Регистрация</h1>
 
         <form th:action="@{/register}" th:object="${registerRequest}" method="post">
+        <div class="oauth-login" th:if="${googleLoginEnabled}">
+            <a class="btn google-login-button" th:href="@{/oauth2/authorization/google}">
+                Войти через Google
+            </a>
+            <div class="oauth-divider">или</div>
+        </div>
+
+        <form th:action="@{/register}" th:object="${registerRequest}" method="post" class="form">
             <input type="hidden"
                    th:if="${_csrf != null}"
                    th:name="${_csrf.parameterName}"

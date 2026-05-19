@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const event = info.event;
             const start = event.start ? event.start.toLocaleString('ru-RU') : '';
             const end = event.end ? event.end.toLocaleString('ru-RU') : '';
-            const status = event.extendedProps.status === 'PENDING' ? 'ожидает решения' : 'подтверждено';
+            const status = event.extendedProps.status === 'CANCELED' ? 'отменено' : 'подтверждено';
 
             alert(event.title + '\n' + start + ' - ' + end + '\nСтатус: ' + status);
         },

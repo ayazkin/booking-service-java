@@ -10,6 +10,8 @@
     <form th:action="@{/bookings}" method="post">
         <div class="success-message" th:if="${success}">Заявка успешно создана</div>
         <div class="error-message" th:if="${error}" th:text="${error}">Ошибка</div>
+        <div class="success" th:if="${success}">Бронь создана</div>
+        <div class="error" th:if="${error}" th:text="${error}">Ошибка</div>
 
         <label>
             Аудитория
@@ -42,6 +44,8 @@
         <div class="actions">
             <button class="btn primary" type="submit">Создать заявку</button>
             <a class="btn" th:href="@{/rooms}">К списку аудиторий</a>
+            <button class="primary" type="submit">Создать бронь</button>
+            <a th:href="@{/rooms}">К аудиториям</a>
         </div>
     </form>
 </main>

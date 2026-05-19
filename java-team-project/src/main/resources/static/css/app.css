@@ -326,6 +326,37 @@ input:focus, select:focus, textarea:focus {
     background: var(--primary);
     border-color: var(--primary);
     color: white;
+.oauth-login {
+    display: grid;
+    gap: 12px;
+    margin-bottom: 18px;
+}
+
+.google-login-button {
+    width: 100%;
+    text-align: center;
+    font-weight: 700;
+}
+
+.oauth-divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #6b7280;
+    font-size: 14px;
+}
+
+.oauth-divider::before,
+.oauth-divider::after {
+    content: "";
+    height: 1px;
+    flex: 1;
+    background: #d7dce2;
+}
+
+.error,
+.field-error {
+    color: #9f1239;
 }
 
 .btn.primary:hover {
