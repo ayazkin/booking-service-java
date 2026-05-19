@@ -7,8 +7,12 @@ import com.booking.javaproject.room.model.Room;
 import com.booking.javaproject.room.repository.RoomRepository;
 import com.booking.javaproject.user.model.User;
 import com.booking.javaproject.user.repository.UserRepository;
+import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,7 +20,9 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 @Service
 public class BookingService {
@@ -74,13 +80,54 @@ public class BookingService {
             LocalDateTime startTo,
             Pageable pageable
     ) {
-        return bookingRepository.search(
-                status,
-                roomId,
-                normalizeQuery(userQuery),
-                startFrom,
-                startTo,
-                pageable
+        return bookingRepository.findAll(
+                buildSearchSpecification(status, roomId, normalizeQuery(userQuery), startFrom, startTo),
+                withDefaultBookingSort(pageable)
+        );
+    }
+
+    private Specification<Booking> buildSearchSpecification(
+            BookingStatus status,
+            Long roomId,
+            String userQuery,
+            LocalDateTime startFrom,
+            LocalDateTime startTo
+    ) {
+        return (root, query, criteriaBuilder) -> {
+            List<Predicate> predicates = new ArrayList<>();
+
+            if (status != null) {
+                predicates.add(criteriaBuilder.equal(root.get("status"), status));
+            }
+            if (roomId != null) {
+                predicates.add(criteriaBuilder.equal(root.get("room").get("id"), roomId));
+            }
+            if (!userQuery.isBlank()) {
+                String likePattern = "%" + userQuery + "%";
+                predicates.add(criteriaBuilder.or(
+                        criteriaBuilder.like(criteriaBuilder.lower(root.get("user").get("username")), likePattern),
+                        criteriaBuilder.like(criteriaBuilder.lower(root.get("user").get("email")), likePattern)
+                ));
+            }
+            if (startFrom != null) {
+                predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("startTime"), startFrom));
+            }
+            if (startTo != null) {
+                predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("startTime"), startTo));
+            }
+
+            return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+        };
+    }
+
+    private Pageable withDefaultBookingSort(Pageable pageable) {
+        if (pageable.isUnpaged() || pageable.getSort().isSorted()) {
+            return pageable;
+        }
+        return PageRequest.of(
+                pageable.getPageNumber(),
+                pageable.getPageSize(),
+                Sort.by(Sort.Direction.DESC, "startTime")
         );
     }
 
@@ -176,7 +223,7 @@ public class BookingService {
         if (query == null || query.isBlank()) {
             return "";
         }
-        return query.trim();
+        return query.trim().toLowerCase(Locale.ROOT);
     }
 
     private String normalizeComment(String comment) {
