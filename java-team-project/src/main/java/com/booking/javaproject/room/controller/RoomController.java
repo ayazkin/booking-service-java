@@ -4,11 +4,14 @@ import com.booking.javaproject.equipment.service.EquipmentService;
 import com.booking.javaproject.room.service.RoomService;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import java.time.LocalDateTime;
 
 @Controller
 @RequestMapping("/rooms")
@@ -28,6 +31,12 @@ public class RoomController {
             @RequestParam(required = false) Integer minCapacity,
             @RequestParam(required = false) Integer floor,
             @RequestParam(required = false) Long equipmentId,
+            @RequestParam(required = false)
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+            LocalDateTime startTime,
+            @RequestParam(required = false)
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+            LocalDateTime endTime,
             @RequestParam(required = false) Boolean activeOnly,
             @RequestParam(required = false) String filter,
             @PageableDefault(size = 10, sort = "number") Pageable pageable,
@@ -40,6 +49,8 @@ public class RoomController {
                 minCapacity,
                 floor,
                 equipmentId,
+                startTime,
+                endTime,
                 onlyActive,
                 pageable
         ));
@@ -48,6 +59,8 @@ public class RoomController {
         model.addAttribute("minCapacity", minCapacity);
         model.addAttribute("floor", floor);
         model.addAttribute("equipmentId", equipmentId);
+        model.addAttribute("startTime", startTime);
+        model.addAttribute("endTime", endTime);
         model.addAttribute("activeOnly", onlyActive);
 
         return "rooms/list";
