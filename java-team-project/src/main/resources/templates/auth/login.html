@@ -8,13 +8,13 @@
     <section class="auth-panel">
         <h1>Вход</h1>
 
-        <div class="success" th:if="${registered}">
+        <div class="success-message" th:if="${registered}">
             Регистрация завершена. Теперь можно войти.
         </div>
-        <div class="error" th:if="${param.error}">
+        <div class="error-message" th:if="${param.error}">
             Неверный email или пароль.
         </div>
-        <div class="success" th:if="${param.logout}">
+        <div class="success-message" th:if="${param.logout}">
             Вы вышли из системы.
         </div>
 

@@ -14,7 +14,7 @@
                    th:name="${_csrf.parameterName}"
                    th:value="${_csrf.token}">
 
-            <div class="error" th:if="${#fields.hasGlobalErrors()}">
+            <div class="error-message" th:if="${#fields.hasGlobalErrors()}">
                 <p th:each="error : ${#fields.globalErrors()}" th:text="${error}">Ошибка регистрации</p>
             </div>
 

@@ -25,7 +25,7 @@
                 </div>
                 <div sec:authorize="isAuthenticated()" class="user-info">
                     <span class="username" sec:authentication="name">User</span>
-                    <form th:action="@{/logout}" method="post" style="display: inline;">
+                    <form th:action="@{/logout}" method="post" >
                         <button type="submit" class="logout-button">Выйти</button>
                     </form>
                 </div>

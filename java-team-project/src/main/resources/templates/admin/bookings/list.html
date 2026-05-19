@@ -1,186 +1,14 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ru" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Бронирования</title>
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            color: #1f2937;
-            background: #f6f7f9;
-        }
-
-        main {
-            max-width: 1220px;
-            margin: 0 auto;
-            padding: 32px 20px;
-        }
-
-        h1 {
-            margin: 0 0 24px;
-            font-size: 32px;
-        }
-
-        .filters {
-            display: grid;
-            grid-template-columns: minmax(150px, 1fr) minmax(180px, 1.4fr) minmax(170px, 1.3fr) repeat(2, minmax(170px, 1.2fr));
-            gap: 14px;
-            align-items: end;
-            margin-bottom: 20px;
-            padding: 16px;
-            background: #ffffff;
-            border: 1px solid #d7dce2;
-        }
-
-        label {
-            display: grid;
-            gap: 6px;
-            font-size: 14px;
-            font-weight: 700;
-        }
-
-        input,
-        select,
-        textarea {
-            width: 100%;
-            box-sizing: border-box;
-            padding: 10px 12px;
-            border: 1px solid #cfd6df;
-            font: inherit;
-            background: #ffffff;
-        }
-
-        textarea {
-            min-height: 74px;
-            resize: vertical;
-        }
-
-        .filter-actions {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-
-        a,
-        button {
-            display: inline-block;
-            padding: 10px 12px;
-            border: 1px solid #cfd6df;
-            color: #1f2937;
-            background: #ffffff;
-            font: inherit;
-            text-decoration: none;
-            cursor: pointer;
-        }
-
-        .primary {
-            border-color: #111827;
-            background: #111827;
-            color: #ffffff;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            background: #ffffff;
-            border: 1px solid #d7dce2;
-        }
-
-        th,
-        td {
-            padding: 14px 16px;
-            border-bottom: 1px solid #e5e7eb;
-            text-align: left;
-            vertical-align: top;
-        }
-
-        th {
-            background: #eef2f7;
-            font-size: 14px;
-        }
-
-        tr:last-child td {
-            border-bottom: none;
-        }
-
-        .empty {
-            padding: 18px;
-            background: #ffffff;
-            border: 1px solid #d7dce2;
-        }
-
-        .actions {
-            display: grid;
-            gap: 8px;
-        }
-
-        .error {
-            margin-bottom: 16px;
-            padding: 12px;
-            background: #fff1f2;
-            border: 1px solid #fda4af;
-            color: #9f1239;
-        }
-
-        .success {
-            margin-bottom: 16px;
-            padding: 12px;
-            background: #ecfdf5;
-            border: 1px solid #86efac;
-            color: #166534;
-        }
-
-        .cancel-form {
-            display: grid;
-            gap: 8px;
-        }
-
-        .pagination {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            align-items: center;
-            margin-top: 20px;
-        }
-
-        .pagination a,
-        .pagination span {
-            min-width: 40px;
-            padding: 9px 12px;
-            box-sizing: border-box;
-            border: 1px solid #cfd6df;
-            color: #1f2937;
-            background: #ffffff;
-            text-align: center;
-            text-decoration: none;
-        }
-
-        .pagination .current {
-            border-color: #111827;
-            background: #111827;
-            color: #ffffff;
-        }
-
-        .pagination .disabled {
-            color: #8a94a3;
-            background: #eef2f7;
-        }
-
-        @media (max-width: 980px) {
-            .filters {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
+<head th:replace="~{fragments/head :: head(title='Управление бронированиями')}">
 </head>
 <body>
+<div th:replace="~{fragments/header :: header}"></div>
 <main>
-    <h1>Бронирования</h1>
+    <h1>Бронирования (админ)</h1>
 
-    <div class="success" th:if="${success}" th:text="${success}">Бронь отменена</div>
-    <div class="error" th:if="${error}" th:text="${error}">Ошибка</div>
+    <div class="success-message" th:if="${success}" th:text="${success}">Успешно</div>
+    <div class="error-message" th:if="${error}" th:text="${error}">Ошибка</div>
 
     <form class="filters" th:action="@{/admin/bookings}" method="get">
         <input type="hidden" name="size" th:value="${bookingsPage.size}">
@@ -188,12 +16,12 @@
         <label>
             Статус
             <select name="status">
-                <option value="">Любой</option>
+                <option value="">Все статусы</option>
                 <option th:each="item : ${statuses}"
                         th:value="${item}"
                         th:text="${item}"
                         th:selected="${status != null and item == status}">
-                    APPROVED
+                    PENDING
                 </option>
             </select>
         </label>
@@ -201,34 +29,34 @@
         <label>
             Аудитория
             <select name="roomId">
-                <option value="">Любая</option>
+                <option value="">Все комнаты</option>
                 <option th:each="room : ${rooms}"
                         th:value="${room.id}"
                         th:text="${room.number + ' - ' + room.name}"
                         th:selected="${roomId != null and room.id == roomId}">
-                    101 - Лекционная аудитория
+                    101 - Лекционная
                 </option>
             </select>
         </label>
 
         <label>
             Пользователь
-            <input type="text" name="userQuery" th:value="${userQuery}">
+            <input type="text" name="userQuery" th:value="${userQuery}" placeholder="Имя или email">
         </label>
 
         <label>
-            Начало от
+            Начало с
             <input type="datetime-local" name="startFrom" th:value="${startFrom}">
         </label>
 
         <label>
-            Начало до
+            Начало по
             <input type="datetime-local" name="startTo" th:value="${startTo}">
         </label>
 
         <div class="filter-actions">
-            <button class="primary" type="submit">Найти</button>
-            <a th:href="@{/admin/bookings}">Сбросить</a>
+            <button class="btn primary" type="submit">Найти</button>
+            <a class="btn" th:href="@{/admin/bookings}">Сбросить</a>
         </div>
     </form>
 
@@ -242,35 +70,43 @@
             <th>Пользователь</th>
             <th>Аудитория</th>
             <th>Начало</th>
-            <th>Окончание</th>
+            <th>Конец</th>
             <th>Статус</th>
             <th>Комментарий</th>
-            <th>Комментарий администратора</th>
+            <th>Ответ админа</th>
             <th>Действия</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="booking : ${bookingsPage.content}">
             <td>
-                <span th:text="${booking.user.username}">user</span><br>
-                <span th:text="${booking.user.email}">user@example.com</span>
+                <span th:text="${booking.user.username}" >user</span><br>
+                <small th:text="${booking.user.email}" >user@example.com</small>
             </td>
-            <td th:text="${booking.room.number + ' - ' + booking.room.name}">101 - Лекционная аудитория</td>
-            <td th:text="${booking.startTime}">2026-05-15T10:00</td>
-            <td th:text="${booking.endTime}">2026-05-15T12:00</td>
-            <td th:text="${booking.status}">APPROVED</td>
+            <td th:text="${booking.room.number + ' - ' + booking.room.name}">101 - Лекционная</td>
+            <td th:text="${#temporals.format(booking.startTime, 'dd.MM.yyyy HH:mm')}">14.05.2026 10:00</td>
+            <td th:text="${#temporals.format(booking.endTime, 'dd.MM.yyyy HH:mm')}">14.05.2026 12:00</td>
+            <td>
+                <span th:class="'badge ' + ${booking.status.name().toLowerCase()}"
+                      th:text="${booking.status}">APPROVED</span>
+            </td>
             <td th:text="${booking.comment ?: '-'}">-</td>
             <td th:text="${booking.adminComment ?: '-'}">-</td>
             <td>
                 <div class="actions">
-                    <form class="cancel-form"
-                          th:if="${booking.status.name() == 'PENDING' or booking.status.name() == 'APPROVED'}"
-                          th:action="@{/admin/bookings/{id}/cancel(id=${booking.id})}"
-                          method="post">
-                        <textarea name="adminComment" required maxlength="1000" placeholder="Комментарий администратора"></textarea>
-                        <button type="submit">Отменить</button>
+                    <form th:if="${booking.status.name() == 'PENDING'}"
+                          th:action="@{/admin/bookings/{id}/approve(id=${booking.id})}"
+                          method="post" >
+                        <button class="btn primary" type="submit">Одобрить</button>
                     </form>
-                    <span th:if="${booking.status.name() != 'PENDING' and booking.status.name() != 'APPROVED'}">-</span>
+                    
+                    <form th:if="${booking.status.name() == 'PENDING' or booking.status.name() == 'APPROVED'}"
+                          th:action="@{/admin/bookings/{id}/cancel(id=${booking.id})}"
+                          method="post" >
+                        <textarea name="adminComment" required maxlength="1000" placeholder="Причина отказа/отмены" style="padding: 6px; font-size: 12px; min-height: 60px;"></textarea>
+                        <button class="btn" type="submit">Отклонить/Отменить</button>
+                    </form>
+                    <span th:if="${booking.status.name() == 'REJECTED' or booking.status.name() == 'CANCELLED'}">-</span>
                 </div>
             </td>
         </tr>
