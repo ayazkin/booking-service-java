@@ -72,16 +72,17 @@ public class RoomService {
             boolean activeOnly,
             Pageable pageable
     ) {
-        LocalDateTime availabilityStartTime = resolveAvailabilityStartTime(startTime, endTime);
-        LocalDateTime availabilityEndTime = resolveAvailabilityEndTime(startTime, endTime);
+        validateAvailabilityInterval(startTime, endTime);
+        boolean availabilityFilterEnabled = startTime != null && endTime != null;
         Page<Room> rooms = roomRepository.search(
                 normalizeQuery(query),
                 minCapacity,
                 floor,
                 equipmentId,
-                availabilityStartTime,
-                availabilityEndTime,
+                startTime,
+                endTime,
                 BookingStatus.APPROVED,
+                availabilityFilterEnabled,
                 activeOnly,
                 pageable
         );
@@ -156,16 +157,6 @@ public class RoomService {
             return "";
         }
         return query.trim();
-    }
-
-    private LocalDateTime resolveAvailabilityStartTime(LocalDateTime startTime, LocalDateTime endTime) {
-        validateAvailabilityInterval(startTime, endTime);
-        return startTime != null && endTime != null ? startTime : null;
-    }
-
-    private LocalDateTime resolveAvailabilityEndTime(LocalDateTime startTime, LocalDateTime endTime) {
-        validateAvailabilityInterval(startTime, endTime);
-        return startTime != null && endTime != null ? endTime : null;
     }
 
     private void validateAvailabilityInterval(LocalDateTime startTime, LocalDateTime endTime) {
