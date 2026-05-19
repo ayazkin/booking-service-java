@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/head :: head('Регистрация')}"></head>
 <body>
@@ -8,7 +8,7 @@
     <section class="auth-panel">
         <h1>Регистрация</h1>
 
-        <form th:action="@{/register}" th:object="${registerRequest}" method="post" class="form">
+        <form th:action="@{/register}" th:object="${registerRequest}" method="post">
             <input type="hidden"
                    th:if="${_csrf != null}"
                    th:name="${_csrf.parameterName}"
@@ -49,17 +49,12 @@
             </label>
 
             <label>
-                Повторите пароль
+                Подтверждение пароля
                 <input type="password" th:field="*{confirmPassword}" required autocomplete="new-password">
-                <span class="field-error"
-                      th:if="${#fields.hasErrors('confirmPassword')}"
-                      th:errors="*{confirmPassword}">Ошибка</span>
-                <span class="field-error"
-                      th:if="${#fields.hasErrors('passwordConfirmed')}"
-                      th:errors="*{passwordConfirmed}">Ошибка</span>
+                <span class="field-error" th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}">Ошибка</span>
             </label>
 
-            <button class="primary" type="submit">Зарегистрироваться</button>
+            <button class="btn primary" type="submit">Создать аккаунт</button>
         </form>
 
         <p class="auth-note">

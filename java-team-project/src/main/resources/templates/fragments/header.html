@@ -1,31 +1,29 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <body>
 <header th:fragment="header" class="main-header">
     <div class="header-content">
         <a th:href="@{/}" class="logo">BookingService</a>
         <nav class="main-nav">
-            <a th:href="@{/}" class="nav-link">Главная</a>
             <a th:href="@{/rooms}" class="nav-link">Аудитории</a>
-            <a th:href="@{/calendar}" class="nav-link">Календарь</a>
-            <a th:href="@{/bookings/my}" sec:authorize="isAuthenticated()" class="nav-link">Мои брони</a>
+            <a th:href="@{/bookings/my}" sec:authorize="isAuthenticated()" class="nav-link">Мои бронирования</a>
+
+            <div sec:authorize="hasRole('ADMIN')" class="admin-links">
+                <a th:href="@{/admin/rooms}" class="nav-link admin">Управление аудиториями</a>
+                <a th:href="@{/admin/equipment}" class="nav-link admin">Оборудование</a>
+                <a th:href="@{/admin/bookings}" class="nav-link admin">Заявки</a>
+            </div>
 
             <div class="nav-separator"></div>
 
-            <div sec:authorize="hasRole('ADMIN')" class="admin-links">
-                <a th:href="@{/admin/rooms}" class="nav-link admin">Аудитории</a>
-                <a th:href="@{/admin/equipment}" class="nav-link admin">Оборудование</a>
-                <a th:href="@{/admin/bookings}" class="nav-link admin">Бронирования</a>
-            </div>
-
             <div class="auth-links">
-                <div sec:authorize="isAnonymous()">
-                    <a th:href="@{/login}" class="nav-link">Войти</a>
-                    <a th:href="@{/register}" class="nav-link">Регистрация</a>
+                <div sec:authorize="isAnonymous()" class="auth-group" style="display: flex; gap: 12px; align-items: center;">
+                    <a th:href="@{/login}" class="btn">Войти</a>
+                    <a th:href="@{/register}" class="btn primary">Регистрация</a>
                 </div>
                 <div sec:authorize="isAuthenticated()" class="user-info">
                     <span class="username" sec:authentication="name">User</span>
-                    <form th:action="@{/logout}" method="post" >
+                    <form th:action="@{/logout}" method="post" class="logout-form">
                         <button type="submit" class="logout-button">Выйти</button>
                     </form>
                 </div>

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/head :: head('Вход')}"></head>
 <body>
@@ -18,7 +18,7 @@
             Вы вышли из системы.
         </div>
 
-        <form th:action="@{/login}" method="post" class="form">
+        <form th:action="@{/login}" method="post">
             <input type="hidden"
                    th:if="${_csrf != null}"
                    th:name="${_csrf.parameterName}"
@@ -26,15 +26,15 @@
 
             <label>
                 Email
-                <input type="email" name="email" required autocomplete="username">
+                <input type="email" name="email" required autocomplete="username" placeholder="example@mail.com">
             </label>
 
             <label>
                 Пароль
-                <input type="password" name="password" required autocomplete="current-password">
+                <input type="password" name="password" required autocomplete="current-password" placeholder="••••••••">
             </label>
 
-            <button class="primary" type="submit">Войти</button>
+            <button class="btn primary" type="submit">Войти</button>
         </form>
 
         <p class="auth-note">
