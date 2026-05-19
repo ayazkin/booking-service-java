@@ -383,6 +383,44 @@ input:focus, select:focus, textarea:focus {
     margin-bottom: 24px;
 }
 
+/* Error pages */
+.error-page {
+    min-height: calc(100vh - 129px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.error-panel {
+    width: min(100%, 620px);
+    padding: 32px;
+    background: #ffffff;
+    border: 1px solid #d7dce2;
+}
+
+.error-code {
+    margin: 0 0 8px;
+    color: #7c3aed;
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.error-panel h1 {
+    margin-top: 0;
+}
+
+.error-panel p {
+    color: #4b5563;
+}
+
+/* Responsive */
+@media (max-width: 800px) {
+    .filters {
+        grid-template-columns: 1fr;
+    }
+}
 .success-message { background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; }
 .error-message { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
 

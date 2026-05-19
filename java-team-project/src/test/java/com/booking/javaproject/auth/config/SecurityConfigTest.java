@@ -11,8 +11,11 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -54,6 +57,14 @@ class SecurityConfigTest {
     }
 
     @Test
+    void unknownPublicPagesUseNotFoundTemplate() throws Exception {
+        mockMvc.perform(get("/not-existing-page")
+                        .accept(MediaType.TEXT_HTML))
+                .andExpect(status().isNotFound())
+                .andExpect(view().name("error/404"));
+    }
+
+    @Test
     @WithMockUser(roles = "USER")
     void userCanOpenBookingPagesButCannotOpenAdminPages() throws Exception {
         mockMvc.perform(get("/bookings/new"))
@@ -88,5 +99,43 @@ class SecurityConfigTest {
                                 }
                                 """))
                 .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser(roles = "USER")
+    void apiSecurityErrorsAreReturnedAsJson() throws Exception {
+        mockMvc.perform(post("/api/rooms")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {
+                                  "number": "401",
+                                  "name": "Seminar room",
+                                  "capacity": 20,
+                                  "floor": 4
+                                }
+                                """))
+                .andExpect(status().isForbidden())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.success").value(false))
+                .andExpect(jsonPath("$.message").value("Доступ запрещен"));
+    }
+
+    @Test
+    void apiErrorsAreReturnedAsJson() throws Exception {
+        mockMvc.perform(get("/api/rooms/999")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.success").value(false))
+                .andExpect(jsonPath("$.message").isString());
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    void htmlErrorsUseErrorTemplate() throws Exception {
+        mockMvc.perform(get("/admin/rooms/999/edit")
+                        .accept(MediaType.TEXT_HTML))
+                .andExpect(status().isNotFound())
+                .andExpect(view().name("error/404"));
     }
 }

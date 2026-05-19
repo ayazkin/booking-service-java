@@ -1,5 +1,6 @@
 package com.booking.javaproject.auth.config;
 
+import com.booking.javaproject.common.error.JsonSecurityExceptionHandler;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,11 +22,16 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(
             HttpSecurity http,
             ObjectProvider<ClientRegistrationRepository> clientRegistrationRepository,
-            OAuth2UserService<OAuth2UserRequest, OAuth2User> oauth2UserService
+            OAuth2UserService<OAuth2UserRequest, OAuth2User> oauth2UserService,
+            JsonSecurityExceptionHandler jsonSecurityExceptionHandler
     ) throws Exception {
         http
                 .csrf(csrf -> csrf
                         .ignoringRequestMatchers("/api/**")
+                )
+                .exceptionHandling(exceptionHandling -> exceptionHandling
+                        .authenticationEntryPoint(jsonSecurityExceptionHandler)
+                        .accessDeniedHandler(jsonSecurityExceptionHandler)
                 )
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.GET, "/api/rooms", "/api/rooms/**", "/api/calendar/bookings").permitAll()
@@ -33,7 +39,7 @@ public class SecurityConfig {
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/bookings/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers("/api/**").hasRole("ADMIN")
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll()
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
