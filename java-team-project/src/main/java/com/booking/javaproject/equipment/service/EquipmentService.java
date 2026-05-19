@@ -36,7 +36,12 @@ public class EquipmentService {
 
     @Transactional
     public Equipment create(String name, String description) {
-        Equipment equipment = new Equipment(name.trim());
+        String normalizedName = normalizeName(name);
+        if (equipmentRepository.existsByNameIgnoreCase(normalizedName)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Equipment with this name already exists");
+        }
+
+        Equipment equipment = new Equipment(normalizedName);
         equipment.setDescription(normalizeDescription(description));
         return equipmentRepository.save(equipment);
     }
@@ -44,7 +49,12 @@ public class EquipmentService {
     @Transactional
     public Equipment update(Long id, String name, String description, boolean active) {
         Equipment equipment = findById(id);
-        equipment.setName(name.trim());
+        String normalizedName = normalizeName(name);
+        if (equipmentRepository.existsByNameIgnoreCaseAndIdNot(normalizedName, id)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Equipment with this name already exists");
+        }
+
+        equipment.setName(normalizedName);
         equipment.setDescription(normalizeDescription(description));
         equipment.setActive(active);
         return equipment;
@@ -56,10 +66,25 @@ public class EquipmentService {
         equipment.setActive(false);
     }
 
+    private String normalizeName(String name) {
+        if (name == null || name.isBlank()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Equipment name is required");
+        }
+        String normalizedName = name.trim();
+        if (normalizedName.length() > 120) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Equipment name must be 120 characters or less");
+        }
+        return normalizedName;
+    }
+
     private String normalizeDescription(String description) {
         if (description == null || description.isBlank()) {
             return null;
         }
-        return description.trim();
+        String normalizedDescription = description.trim();
+        if (normalizedDescription.length() > 500) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Equipment description must be 500 characters or less");
+        }
+        return normalizedDescription;
     }
 }
