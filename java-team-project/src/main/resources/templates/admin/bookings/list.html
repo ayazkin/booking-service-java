@@ -264,13 +264,13 @@
             <td>
                 <div class="actions">
                     <form class="cancel-form"
-                          th:if="${booking.status.name() == 'PENDING' or booking.status.name() == 'APPROVED'}"
+                          th:if="${booking.status.name() == 'APPROVED'}"
                           th:action="@{/admin/bookings/{id}/cancel(id=${booking.id})}"
                           method="post">
                         <textarea name="adminComment" required maxlength="1000" placeholder="Комментарий администратора"></textarea>
                         <button type="submit">Отменить</button>
                     </form>
-                    <span th:if="${booking.status.name() != 'PENDING' and booking.status.name() != 'APPROVED'}">-</span>
+                    <span th:if="${booking.status.name() != 'APPROVED'}">-</span>
                 </div>
             </td>
         </tr>
