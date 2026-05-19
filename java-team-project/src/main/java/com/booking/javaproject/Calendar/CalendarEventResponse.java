@@ -1,7 +1,6 @@
 package com.booking.javaproject.Calendar;
 
 import com.booking.javaproject.booking.model.Booking;
-import com.booking.javaproject.booking.model.BookingStatus;
 
 import java.util.Map;
 
@@ -40,7 +39,7 @@ public class CalendarEventResponse {
                 roomTitle,
                 booking.getStartTime().toString(),
                 booking.getEndTime().toString(),
-                colorForStatus(booking.getStatus()),
+                "#2563eb",
                 "#ffffff",
                 Map.of(
                         "status", booking.getStatus().name(),
@@ -48,13 +47,6 @@ public class CalendarEventResponse {
                         "roomName", booking.getRoom().getName()
                 )
         );
-    }
-
-    private static String colorForStatus(BookingStatus status) {
-        if (status == BookingStatus.PENDING) {
-            return "#d97706";
-        }
-        return "#2563eb";
     }
 
     public Long getId() {

@@ -164,17 +164,17 @@
             <td th:text="${booking.room.number + ' - ' + booking.room.name}">101 - Лекционная аудитория</td>
             <td th:text="${booking.startTime}">2026-05-14T10:00</td>
             <td th:text="${booking.endTime}">2026-05-14T12:00</td>
-            <td th:text="${booking.status}">PENDING</td>
+            <td th:text="${booking.status}">APPROVED</td>
             <td th:text="${booking.comment ?: '-'}">-</td>
             <td th:text="${booking.adminComment ?: '-'}">-</td>
             <td>
                 <div class="actions">
-                    <form th:if="${booking.status.name() == 'PENDING' or booking.status.name() == 'APPROVED'}"
+                    <form th:if="${booking.status.name() == 'APPROVED'}"
                           th:action="@{/bookings/{id}/cancel(id=${booking.id})}"
                           method="post">
                         <button type="submit">Отменить</button>
                     </form>
-                    <span th:if="${booking.status.name() != 'PENDING' and booking.status.name() != 'APPROVED'}">-</span>
+                    <span th:if="${booking.status.name() != 'APPROVED'}">-</span>
                 </div>
             </td>
         </tr>

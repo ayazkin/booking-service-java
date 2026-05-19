@@ -97,7 +97,7 @@
     <h1>Новая бронь</h1>
 
     <form th:action="@{/bookings}" method="post">
-        <div class="success" th:if="${success}">Заявка на бронирование создана</div>
+        <div class="success" th:if="${success}">Бронь создана</div>
         <div class="error" th:if="${error}" th:text="${error}">Ошибка</div>
 
         <label>
@@ -129,7 +129,7 @@
         </label>
 
         <div class="actions">
-            <button class="primary" type="submit">Создать заявку</button>
+            <button class="primary" type="submit">Создать бронь</button>
             <a th:href="@{/rooms}">К аудиториям</a>
         </div>
     </form>

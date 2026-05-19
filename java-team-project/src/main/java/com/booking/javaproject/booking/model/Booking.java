@@ -42,7 +42,7 @@ public class Booking {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 30)
-    private BookingStatus status = BookingStatus.PENDING;
+    private BookingStatus status = BookingStatus.APPROVED;
 
     @Column(length = 1000)
     private String comment;
@@ -137,7 +137,7 @@ public class Booking {
     @PrePersist
     void onCreate() {
         if (status == null) {
-            status = BookingStatus.PENDING;
+            status = BookingStatus.APPROVED;
         }
         LocalDateTime now = LocalDateTime.now();
         createdAt = now;

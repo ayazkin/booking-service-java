@@ -115,6 +115,33 @@ class BookingServiceTest {
     }
 
     @Test
+    void allowsOverlappingBookingAfterCancellation() {
+        User firstUser = saveUser("first-cancel@example.com");
+        User secondUser = saveUser("second-cancel@example.com");
+        Room room = saveRoom("104", "Shared room");
+        LocalDateTime start = LocalDateTime.of(2026, 5, 21, 11, 0);
+
+        Booking canceledBooking = bookingService.createBooking(
+                principal(firstUser.getEmail()),
+                room.getId(),
+                start,
+                start.plusHours(1),
+                null
+        );
+        bookingService.cancelCurrentUserBooking(principal(firstUser.getEmail()), canceledBooking.getId());
+
+        Booking approvedBooking = bookingService.createBooking(
+                principal(secondUser.getEmail()),
+                room.getId(),
+                start.plusMinutes(15),
+                start.plusMinutes(45),
+                null
+        );
+
+        assertThat(approvedBooking.getStatus()).isEqualTo(BookingStatus.APPROVED);
+    }
+
+    @Test
     void filtersBookingsByStatusRoomUserAndDates() {
         User alphaUser = saveUser("alpha@example.com");
         User betaUser = saveUser("beta@example.com");

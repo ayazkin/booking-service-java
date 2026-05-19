@@ -27,10 +27,7 @@ import java.util.Locale;
 @Service
 public class BookingService {
 
-    private static final List<BookingStatus> BUSY_STATUSES = List.of(
-            BookingStatus.PENDING,
-            BookingStatus.APPROVED
-    );
+    private static final List<BookingStatus> BUSY_STATUSES = List.of(BookingStatus.APPROVED);
 
     private final BookingRepository bookingRepository;
     private final RoomRepository roomRepository;
@@ -216,7 +213,7 @@ public class BookingService {
     }
 
     private boolean isActiveBookingStatus(BookingStatus status) {
-        return status == BookingStatus.PENDING || status == BookingStatus.APPROVED;
+        return status == BookingStatus.APPROVED;
     }
 
     private String normalizeQuery(String query) {
