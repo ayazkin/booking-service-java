@@ -26,7 +26,7 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
             from Booking b
             where (:status is null or b.status = :status)
               and (:roomId is null or b.room.id = :roomId)
-              and (:userQuery is null
+              and (:userQuery = ''
                 or lower(b.user.username) like lower(concat('%', :userQuery, '%'))
                 or lower(b.user.email) like lower(concat('%', :userQuery, '%')))
               and (:startFrom is null or b.startTime >= :startFrom)
