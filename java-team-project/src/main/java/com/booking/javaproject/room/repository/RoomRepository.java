@@ -1,5 +1,6 @@
 package com.booking.javaproject.room.repository;
 
+import com.booking.javaproject.booking.model.BookingStatus;
 import com.booking.javaproject.room.model.Room;
 import jakarta.persistence.LockModeType;
 import org.springframework.data.domain.Page;
@@ -9,6 +10,7 @@ import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,12 +41,25 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
               and (:floor is null or r.floor = :floor)
               and (:equipmentId is null or e.id = :equipmentId)
               and (:activeOnly = false or r.active = true)
+              and (:availabilityFilterEnabled = false
+                or not exists (
+                    select b.id
+                    from Booking b
+                    where b.room = r
+                      and b.status = :busyStatus
+                      and b.startTime < :endTime
+                      and b.endTime > :startTime
+                ))
             """)
     Page<Room> search(
             @Param("query") String query,
             @Param("minCapacity") Integer minCapacity,
             @Param("floor") Integer floor,
             @Param("equipmentId") Long equipmentId,
+            @Param("startTime") LocalDateTime startTime,
+            @Param("endTime") LocalDateTime endTime,
+            @Param("busyStatus") BookingStatus busyStatus,
+            @Param("availabilityFilterEnabled") boolean availabilityFilterEnabled,
             @Param("activeOnly") boolean activeOnly,
             Pageable pageable
     );

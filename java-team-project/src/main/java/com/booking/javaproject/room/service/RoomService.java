@@ -1,5 +1,6 @@
 package com.booking.javaproject.room.service;
 
+import com.booking.javaproject.booking.model.BookingStatus;
 import com.booking.javaproject.equipment.model.Equipment;
 import com.booking.javaproject.equipment.repository.EquipmentRepository;
 import com.booking.javaproject.room.model.Room;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -65,14 +67,22 @@ public class RoomService {
             Integer minCapacity,
             Integer floor,
             Long equipmentId,
+            LocalDateTime startTime,
+            LocalDateTime endTime,
             boolean activeOnly,
             Pageable pageable
     ) {
+        validateAvailabilityInterval(startTime, endTime);
+        boolean availabilityFilterEnabled = startTime != null && endTime != null;
         Page<Room> rooms = roomRepository.search(
                 normalizeQuery(query),
                 minCapacity,
                 floor,
                 equipmentId,
+                startTime,
+                endTime,
+                BookingStatus.APPROVED,
+                availabilityFilterEnabled,
                 activeOnly,
                 pageable
         );
@@ -147,6 +157,12 @@ public class RoomService {
             return "";
         }
         return query.trim();
+    }
+
+    private void validateAvailabilityInterval(LocalDateTime startTime, LocalDateTime endTime) {
+        if (startTime != null && endTime != null && !startTime.isBefore(endTime)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "End time must be after start time");
+        }
     }
 
     private String normalizeNumber(String number) {

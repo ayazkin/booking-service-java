@@ -60,9 +60,15 @@ public class BookingController {
     public String newBookingForm(
             @RequestParam(required = false) Long roomId,
             @RequestParam(required = false) Boolean success,
+            @RequestParam(required = false)
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+            LocalDateTime startTime,
+            @RequestParam(required = false)
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+            LocalDateTime endTime,
             Model model
     ) {
-        fillFormModel(model, roomId, null, null, null);
+        fillFormModel(model, roomId, startTime, endTime, null);
         model.addAttribute("success", Boolean.TRUE.equals(success));
         return "bookings/new";
     }

@@ -1,9 +1,15 @@
 package com.booking.javaproject.room.service;
 
+import com.booking.javaproject.booking.model.Booking;
+import com.booking.javaproject.booking.model.BookingStatus;
+import com.booking.javaproject.booking.repository.BookingRepository;
 import com.booking.javaproject.equipment.model.Equipment;
 import com.booking.javaproject.equipment.repository.EquipmentRepository;
 import com.booking.javaproject.room.model.Room;
 import com.booking.javaproject.room.repository.RoomRepository;
+import com.booking.javaproject.user.model.User;
+import com.booking.javaproject.user.model.UserProfile;
+import com.booking.javaproject.user.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,6 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -38,6 +45,12 @@ class RoomServiceTest {
 
     @Autowired
     private EquipmentRepository equipmentRepository;
+
+    @Autowired
+    private BookingRepository bookingRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Test
     void createsRoomWithValidatedEquipmentAndDeduplicatedIds() {
@@ -114,25 +127,64 @@ class RoomServiceTest {
 
         PageRequest pageable = PageRequest.of(0, 10, Sort.by("number"));
 
-        assertThat(roomService.searchRooms("lab", null, null, null, true, pageable).getContent())
+        assertThat(roomService.searchRooms("lab", null, null, null, null, null, true, pageable).getContent())
                 .extracting(Room::getId)
                 .containsExactly(computerLab.getId());
-        assertThat(roomService.searchRooms(null, 50, null, null, true, pageable).getContent())
+        assertThat(roomService.searchRooms(null, 50, null, null, null, null, true, pageable).getContent())
                 .extracting(Room::getId)
                 .containsExactly(lectureRoom.getId());
-        assertThat(roomService.searchRooms(null, null, 3, null, true, pageable).getContent())
+        assertThat(roomService.searchRooms(null, null, 3, null, null, null, true, pageable).getContent())
                 .extracting(Room::getId)
                 .containsExactly(computerLab.getId());
-        assertThat(roomService.searchRooms(null, null, null, projector.getId(), true, pageable).getContent())
+        assertThat(roomService.searchRooms(null, null, null, projector.getId(), null, null, true, pageable).getContent())
                 .extracting(Room::getId)
                 .containsExactly(lectureRoom.getId());
-        assertThat(roomService.searchRooms(null, null, null, projector.getId(), false, pageable).getContent())
+        assertThat(roomService.searchRooms(null, null, null, projector.getId(), null, null, false, pageable).getContent())
                 .extracting(Room::getId)
                 .containsExactly(lectureRoom.getId(), inactiveRoom.getId());
     }
 
+    @Test
+    void searchesAvailableRoomsByIntervalAndIgnoresCanceledBookings() {
+        Equipment projector = saveEquipment("Projector");
+        Room busyRoom = roomService.create("501", "Busy room", 40, 5, null, List.of(projector.getId()));
+        Room availableRoom = roomService.create("502", "Available room", 40, 5, null, List.of(projector.getId()));
+        Room canceledRoom = roomService.create("503", "Canceled booking room", 40, 5, null, List.of(projector.getId()));
+        User user = saveUser("availability@example.com");
+        LocalDateTime start = LocalDateTime.of(2026, 5, 22, 10, 0);
+        LocalDateTime end = LocalDateTime.of(2026, 5, 22, 11, 0);
+
+        saveBooking(user, busyRoom, start, end, BookingStatus.APPROVED);
+        saveBooking(user, canceledRoom, start, end, BookingStatus.CANCELED);
+
+        assertThat(roomService.searchRooms(
+                null,
+                30,
+                5,
+                projector.getId(),
+                start.plusMinutes(15),
+                end.minusMinutes(15),
+                true,
+                PageRequest.of(0, 10, Sort.by("number"))
+        ).getContent())
+                .extracting(Room::getId)
+                .containsExactly(availableRoom.getId(), canceledRoom.getId());
+    }
+
     private Equipment saveEquipment(String name) {
         return equipmentRepository.save(new Equipment(name));
+    }
+
+    private User saveUser(String email) {
+        User user = new User(email, email, "{noop}password");
+        user.setProfile(new UserProfile("Test", "User", null));
+        return userRepository.save(user);
+    }
+
+    private void saveBooking(User user, Room room, LocalDateTime startTime, LocalDateTime endTime, BookingStatus status) {
+        Booking booking = new Booking(user, room, startTime, endTime);
+        booking.setStatus(status);
+        bookingRepository.save(booking);
     }
 
     private void assertBadRequest(Runnable action) {
