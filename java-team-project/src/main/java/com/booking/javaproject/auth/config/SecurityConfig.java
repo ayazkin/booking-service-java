@@ -19,8 +19,8 @@ public class SecurityConfig {
                         .ignoringRequestMatchers("/api/**")
                 )
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.GET, "/api/rooms", "/api/rooms/**").permitAll()
-                        .requestMatchers("/", "/rooms", "/rooms/**", "/register", "/login", "/error", "/css/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/rooms", "/api/rooms/**", "/api/calendar/bookings").permitAll()
+                        .requestMatchers("/", "/rooms", "/rooms/**", "/calendar", "/register", "/login", "/error", "/css/**", "/Calendar/**").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/bookings/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers("/api/**").hasRole("ADMIN")

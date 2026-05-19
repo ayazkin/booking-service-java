@@ -84,6 +84,16 @@ public class BookingService {
         );
     }
 
+    @Transactional(readOnly = true)
+    public List<Booking> findCalendarBookings(LocalDateTime startTime, LocalDateTime endTime) {
+        validateTime(startTime, endTime);
+        return bookingRepository.findByStatusInAndStartTimeLessThanAndEndTimeGreaterThanOrderByStartTimeAsc(
+                BUSY_STATUSES,
+                endTime,
+                startTime
+        );
+    }
+
     @Transactional
     public void cancelCurrentUserBooking(Principal principal, Long bookingId) {
         User user = findCurrentUser(principal);
