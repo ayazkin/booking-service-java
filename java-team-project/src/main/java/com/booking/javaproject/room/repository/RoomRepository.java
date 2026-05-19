@@ -41,8 +41,7 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
               and (:floor is null or r.floor = :floor)
               and (:equipmentId is null or e.id = :equipmentId)
               and (:activeOnly = false or r.active = true)
-              and (:startTime is null
-                or :endTime is null
+              and (:availabilityFilterEnabled = false
                 or not exists (
                     select b.id
                     from Booking b
@@ -60,6 +59,7 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
             @Param("startTime") LocalDateTime startTime,
             @Param("endTime") LocalDateTime endTime,
             @Param("busyStatus") BookingStatus busyStatus,
+            @Param("availabilityFilterEnabled") boolean availabilityFilterEnabled,
             @Param("activeOnly") boolean activeOnly,
             Pageable pageable
     );
