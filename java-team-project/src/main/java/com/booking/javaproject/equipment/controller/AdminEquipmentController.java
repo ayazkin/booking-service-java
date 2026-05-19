@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.server.ResponseStatusException;
 
 @Controller
 @RequestMapping("/admin/equipment")
@@ -37,13 +38,15 @@ public class AdminEquipmentController {
             @RequestParam(required = false) String description,
             Model model
     ) {
-        if (name.isBlank()) {
-            model.addAttribute("error", "Название оборудования обязательно");
+        try {
+            equipmentService.create(name, description);
+        } catch (ResponseStatusException exception) {
+            model.addAttribute("name", name);
             model.addAttribute("description", description);
+            model.addAttribute("error", exception.getReason());
             return "admin/equipment/new";
         }
 
-        equipmentService.create(name, description);
         return "redirect:/admin/equipment";
     }
 
@@ -61,16 +64,18 @@ public class AdminEquipmentController {
             @RequestParam(defaultValue = "false") boolean active,
             Model model
     ) {
-        if (name.isBlank()) {
+        try {
+            equipmentService.update(id, name, description, active);
+        } catch (ResponseStatusException exception) {
             Equipment equipment = equipmentService.findById(id);
+            equipment.setName(name);
             equipment.setDescription(description);
             equipment.setActive(active);
             model.addAttribute("equipment", equipment);
-            model.addAttribute("error", "Название оборудования обязательно");
+            model.addAttribute("error", exception.getReason());
             return "admin/equipment/edit";
         }
 
-        equipmentService.update(id, name, description, active);
         return "redirect:/admin/equipment";
     }
 
