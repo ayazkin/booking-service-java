@@ -21,7 +21,7 @@
                         th:value="${item}"
                         th:text="${item}"
                         th:selected="${status != null and item == status}">
-                    PENDING
+                    APPROVED
                 </option>
             </select>
         </label>
@@ -94,21 +94,13 @@
             <td th:text="${booking.adminComment ?: '-'}">-</td>
             <td>
                 <div class="actions">
-                    <form th:if="${booking.status.name() == 'PENDING'}"
-                          th:action="@{/admin/bookings/{id}/approve(id=${booking.id})}"
-                          method="post" >
-                        <button class="btn primary" type="submit">Одобрить</button>
-                    </form>
-                    
-                    <form th:if="${booking.status.name() == 'PENDING' or booking.status.name() == 'APPROVED'}"
                     <form class="cancel-form"
                           th:if="${booking.status.name() == 'APPROVED'}"
                           th:action="@{/admin/bookings/{id}/cancel(id=${booking.id})}"
                           method="post" >
-                        <textarea name="adminComment" required maxlength="1000" placeholder="Причина отказа/отмены" style="padding: 6px; font-size: 12px; min-height: 60px;"></textarea>
-                        <button class="btn" type="submit">Отклонить/Отменить</button>
+                        <textarea name="adminComment" required maxlength="1000" placeholder="Причина отмены" style="padding: 6px; font-size: 12px; min-height: 60px;"></textarea>
+                        <button class="btn" type="submit">Отменить</button>
                     </form>
-                    <span th:if="${booking.status.name() == 'REJECTED' or booking.status.name() == 'CANCELLED'}">-</span>
                     <span th:if="${booking.status.name() != 'APPROVED'}">-</span>
                 </div>
             </td>
