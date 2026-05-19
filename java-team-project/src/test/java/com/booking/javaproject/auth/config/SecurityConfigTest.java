@@ -27,11 +27,17 @@ class SecurityConfigTest {
                 .andExpect(status().isOk());
         mockMvc.perform(get("/rooms"))
                 .andExpect(status().isOk());
+        mockMvc.perform(get("/calendar"))
+                .andExpect(status().isOk());
         mockMvc.perform(get("/register"))
                 .andExpect(status().isOk());
         mockMvc.perform(get("/login"))
                 .andExpect(status().isOk());
         mockMvc.perform(get("/api/rooms"))
+                .andExpect(status().isOk());
+        mockMvc.perform(get("/api/calendar/bookings")
+                        .param("start", "2026-05-01T00:00:00+03:00")
+                        .param("end", "2026-06-01T00:00:00+03:00"))
                 .andExpect(status().isOk());
     }
 

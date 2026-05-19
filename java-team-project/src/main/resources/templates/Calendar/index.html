@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Календарь бронирований</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+    <link rel="stylesheet" th:href="@{/Calendar/calendar.css}">
+</head>
+<body>
+<div th:replace="~{fragments/header :: header}"></div>
+<main class="calendar-page">
+    <div class="admin-page-header">
+        <h1>Календарь бронирований</h1>
+        <a class="btn primary" sec:authorize="isAuthenticated()" th:href="@{/bookings/new}">Новая бронь</a>
+    </div>
+
+    <div class="calendar-legend" aria-label="Обозначения календаря">
+        <span class="legend-item"><span class="legend-dot legend-approved"></span> Подтверждено</span>
+        <span class="legend-item"><span class="legend-dot legend-pending"></span> Ожидает решения</span>
+    </div>
+
+    <div id="calendar-error" class="error-message calendar-error" hidden>
+        Не удалось загрузить события календаря
+    </div>
+
+    <section class="calendar-shell" aria-label="Календарь занятости аудиторий">
+        <div id="booking-calendar"
+             th:data-events-url="@{/api/calendar/bookings}">
+        </div>
+    </section>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.20/index.global.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.20/locales-all.global.min.js"></script>
+<script th:src="@{/Calendar/calendar.js}"></script>
+</body>
+</html>

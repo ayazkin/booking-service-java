@@ -1,0 +1,59 @@
+.calendar-page {
+    max-width: 1220px;
+}
+
+.calendar-shell {
+    background: #ffffff;
+    border: 1px solid #d7dce2;
+    padding: 18px;
+}
+
+.calendar-legend {
+    display: flex;
+    gap: 18px;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-bottom: 16px;
+    color: #4b5563;
+    font-size: 14px;
+}
+
+.legend-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.legend-dot {
+    width: 12px;
+    height: 12px;
+    display: inline-block;
+    border-radius: 50%;
+}
+
+.legend-approved {
+    background: #2563eb;
+}
+
+.legend-pending {
+    background: #d97706;
+}
+
+.calendar-error {
+    margin-bottom: 16px;
+}
+
+.fc .fc-button-primary {
+    background: #111827;
+    border-color: #111827;
+}
+
+.fc .fc-button-primary:disabled {
+    background: #8a94a3;
+    border-color: #8a94a3;
+}
+
+.fc .fc-daygrid-event,
+.fc .fc-timegrid-event {
+    border-radius: 4px;
+}

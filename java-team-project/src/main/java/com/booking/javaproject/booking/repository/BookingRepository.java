@@ -11,6 +11,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 public interface BookingRepository extends JpaRepository<Booking, Long> {
@@ -44,6 +45,13 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
 
     boolean existsByRoomIdAndStatusInAndStartTimeLessThanAndEndTimeGreaterThan(
             Long roomId,
+            Collection<BookingStatus> statuses,
+            LocalDateTime endTime,
+            LocalDateTime startTime
+    );
+
+    @EntityGraph(attributePaths = "room")
+    List<Booking> findByStatusInAndStartTimeLessThanAndEndTimeGreaterThanOrderByStartTimeAsc(
             Collection<BookingStatus> statuses,
             LocalDateTime endTime,
             LocalDateTime startTime
