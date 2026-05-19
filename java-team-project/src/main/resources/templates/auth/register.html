@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/head :: head('Регистрация')}"></head>
 <body>
@@ -8,6 +8,7 @@
     <section class="auth-panel">
         <h1>Регистрация</h1>
 
+        <form th:action="@{/register}" th:object="${registerRequest}" method="post">
         <div class="oauth-login" th:if="${googleLoginEnabled}">
             <a class="btn google-login-button" th:href="@{/oauth2/authorization/google}">
                 Войти через Google
@@ -21,7 +22,7 @@
                    th:name="${_csrf.parameterName}"
                    th:value="${_csrf.token}">
 
-            <div class="error" th:if="${#fields.hasGlobalErrors()}">
+            <div class="error-message" th:if="${#fields.hasGlobalErrors()}">
                 <p th:each="error : ${#fields.globalErrors()}" th:text="${error}">Ошибка регистрации</p>
             </div>
 
@@ -56,17 +57,12 @@
             </label>
 
             <label>
-                Повторите пароль
+                Подтверждение пароля
                 <input type="password" th:field="*{confirmPassword}" required autocomplete="new-password">
-                <span class="field-error"
-                      th:if="${#fields.hasErrors('confirmPassword')}"
-                      th:errors="*{confirmPassword}">Ошибка</span>
-                <span class="field-error"
-                      th:if="${#fields.hasErrors('passwordConfirmed')}"
-                      th:errors="*{passwordConfirmed}">Ошибка</span>
+                <span class="field-error" th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}">Ошибка</span>
             </label>
 
-            <button class="primary" type="submit">Зарегистрироваться</button>
+            <button class="btn primary" type="submit">Создать аккаунт</button>
         </form>
 
         <p class="auth-note">

@@ -35,7 +35,7 @@
                     <a class="btn" th:href="@{/admin/equipment/{id}/edit(id=${item.id})}">Редактировать</a>
                     <form th:if="${item.active}"
                           th:action="@{/admin/equipment/{id}/deactivate(id=${item.id})}"
-                          method="post" style="display: inline;">
+                          method="post" >
                         <button class="btn" type="submit">Отключить</button>
                     </form>
                 </div>

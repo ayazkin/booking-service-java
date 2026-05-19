@@ -46,7 +46,7 @@
                     <a class="btn" th:href="@{/admin/rooms/{id}/edit(id=${room.id})}">Редактировать</a>
                     <form th:if="${room.active}"
                           th:action="@{/admin/rooms/{id}/deactivate(id=${room.id})}"
-                          method="post" style="display: inline;">
+                          method="post" >
                         <button class="btn" type="submit">Отключить</button>
                     </form>
                 </div>

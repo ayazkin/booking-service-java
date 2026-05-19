@@ -1,102 +1,15 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ru" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Новая бронь</title>
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            color: #1f2937;
-            background: #f6f7f9;
-        }
-
-        main {
-            max-width: 720px;
-            margin: 0 auto;
-            padding: 32px 20px;
-        }
-
-        h1 {
-            margin: 0 0 24px;
-            font-size: 32px;
-        }
-
-        form {
-            display: grid;
-            gap: 16px;
-            padding: 20px;
-            background: #ffffff;
-            border: 1px solid #d7dce2;
-        }
-
-        label {
-            display: grid;
-            gap: 8px;
-            font-weight: 700;
-        }
-
-        input,
-        select,
-        textarea {
-            width: 100%;
-            box-sizing: border-box;
-            padding: 10px 12px;
-            border: 1px solid #cfd6df;
-            font: inherit;
-            background: #ffffff;
-        }
-
-        textarea {
-            min-height: 120px;
-            resize: vertical;
-        }
-
-        .actions {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-
-        a,
-        button {
-            display: inline-block;
-            padding: 9px 12px;
-            border: 1px solid #cfd6df;
-            color: #1f2937;
-            background: #ffffff;
-            font: inherit;
-            text-decoration: none;
-            cursor: pointer;
-        }
-
-        .primary {
-            border-color: #111827;
-            background: #111827;
-            color: #ffffff;
-        }
-
-        .error {
-            padding: 12px;
-            background: #fff1f2;
-            border: 1px solid #fda4af;
-            color: #9f1239;
-        }
-
-        .success {
-            padding: 12px;
-            background: #ecfdf5;
-            border: 1px solid #86efac;
-            color: #166534;
-        }
-    </style>
+<head th:replace="~{fragments/head :: head(title='Новое бронирование')}">
 </head>
 <body>
-<main>
-    <h1>Новая бронь</h1>
+<div th:replace="~{fragments/header :: header}"></div>
+<main style="max-width: 720px;">
+    <h1>Новое бронирование</h1>
 
     <form th:action="@{/bookings}" method="post">
+        <div class="success-message" th:if="${success}">Заявка успешно создана</div>
+        <div class="error-message" th:if="${error}" th:text="${error}">Ошибка</div>
         <div class="success" th:if="${success}">Бронь создана</div>
         <div class="error" th:if="${error}" th:text="${error}">Ошибка</div>
 
@@ -108,7 +21,7 @@
                         th:value="${room.id}"
                         th:text="${room.number + ' - ' + room.name}"
                         th:selected="${roomId != null and room.id == roomId}">
-                    101 - Лекционная аудитория
+                    101 - Лекционная
                 </option>
             </select>
         </label>
@@ -119,16 +32,18 @@
         </label>
 
         <label>
-            Окончание
+            Конец
             <input type="datetime-local" name="endTime" required th:value="${endTime}">
         </label>
 
         <label>
             Комментарий
-            <textarea name="comment" maxlength="1000" th:text="${comment}"></textarea>
+            <textarea name="comment" maxlength="1000" th:text="${comment}" placeholder="Напр. для какой цели нужно помещение"></textarea>
         </label>
 
         <div class="actions">
+            <button class="btn primary" type="submit">Создать заявку</button>
+            <a class="btn" th:href="@{/rooms}">К списку аудиторий</a>
             <button class="primary" type="submit">Создать бронь</button>
             <a th:href="@{/rooms}">К аудиториям</a>
         </div>
