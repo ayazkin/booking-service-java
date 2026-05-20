@@ -6,6 +6,7 @@
         <a th:href="@{/}" class="logo">BookingService</a>
         <nav class="main-nav">
             <a th:href="@{/rooms}" class="nav-link">Аудитории</a>
+            <a th:href="@{/calendar}" class="nav-link">Календарь</a>
             <a th:href="@{/bookings/my}" sec:authorize="isAuthenticated()" class="nav-link">Мои бронирования</a>
 
             <div sec:authorize="hasRole('ADMIN')" class="admin-links">

@@ -5,7 +5,7 @@
 <body>
 <div th:replace="~{fragments/header :: header}"></div>
 <main>
-    <div class="admin-page-header">
+    <div class="page-header">
         <h1>Мои бронирования</h1>
         <a class="btn primary" th:href="@{/bookings/new}">Забронировать</a>
     </div>
@@ -13,50 +13,51 @@
     <div class="success-message" th:if="${success}" th:text="${success}">Успешно</div>
     <div class="error-message" th:if="${error}" th:text="${error}">Ошибка</div>
 
-    <div class="empty" th:if="${bookingsPage.empty}">
-        У вас пока нет бронирований
+    <div class="empty empty-state" th:if="${bookingsPage.empty}">
+        <h2>У вас пока нет бронирований</h2>
+        <p>Выберите аудиторию и отправьте заявку на удобное время.</p>
+        <a class="btn primary" th:href="@{/rooms}">Выбрать аудиторию</a>
     </div>
 
-    <table th:if="${!bookingsPage.empty}">
-        <thead>
-        <tr>
-            <th>Аудитория</th>
-            <th>Начало</th>
-            <th>Конец</th>
-            <th>Статус</th>
-            <th>Комментарий</th>
-            <th>Ответ админа</th>
-            <th>Действия</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="booking : ${bookingsPage.content}">
-            <td th:text="${booking.room.number + ' - ' + booking.room.name}">101 - Лекционная</td>
-            <td th:text="${#temporals.format(booking.startTime, 'dd.MM.yyyy HH:mm')}">14.05.2026 10:00</td>
-            <td th:text="${#temporals.format(booking.endTime, 'dd.MM.yyyy HH:mm')}">14.05.2026 12:00</td>
-            <td>
-                <span th:class="'badge ' + ${booking.status.name().toLowerCase()}"
-                      th:text="${booking.status}">PENDING</span>
-            </td>
-            <td th:text="${booking.room.number + ' - ' + booking.room.name}">101 - Лекционная аудитория</td>
-            <td th:text="${booking.startTime}">2026-05-14T10:00</td>
-            <td th:text="${booking.endTime}">2026-05-14T12:00</td>
-            <td th:text="${booking.status}">APPROVED</td>
-            <td th:text="${booking.comment ?: '-'}">-</td>
-            <td th:text="${booking.adminComment ?: '-'}">-</td>
-            <td>
-                <div class="actions">
-                    <form th:if="${booking.status.name() == 'APPROVED'}"
-                          th:action="@{/bookings/{id}/cancel(id=${booking.id})}"
-                          method="post">
-                        <button class="btn" type="submit">Отменить</button>
-                    </form>
-                    <span th:if="${booking.status.name() != 'APPROVED'}">-</span>
+    <section class="booking-list" th:if="${!bookingsPage.empty}">
+        <article class="booking-card" th:each="booking : ${bookingsPage.content}">
+            <div class="booking-card-main">
+                <div class="booking-title-row">
+                    <h2 th:text="${booking.room.number + ' - ' + booking.room.name}">101 - Лекционная</h2>
+                    <span th:class="'badge ' + ${booking.status.name().toLowerCase()}"
+                          th:text="${booking.status}">APPROVED</span>
                 </div>
-            </td>
-        </tr>
-        </tbody>
-    </table>
+
+                <dl class="booking-details">
+                    <div>
+                        <dt>Начало</dt>
+                        <dd th:text="${#temporals.format(booking.startTime, 'dd.MM.yyyy HH:mm')}">14.05.2026 10:00</dd>
+                    </div>
+                    <div>
+                        <dt>Конец</dt>
+                        <dd th:text="${#temporals.format(booking.endTime, 'dd.MM.yyyy HH:mm')}">14.05.2026 12:00</dd>
+                    </div>
+                    <div>
+                        <dt>Комментарий</dt>
+                        <dd th:text="${booking.comment ?: '-'}">-</dd>
+                    </div>
+                    <div>
+                        <dt>Ответ админа</dt>
+                        <dd th:text="${booking.adminComment ?: '-'}">-</dd>
+                    </div>
+                </dl>
+            </div>
+
+            <div class="booking-actions">
+                <form th:if="${booking.status.name() == 'APPROVED'}"
+                      th:action="@{/bookings/{id}/cancel(id=${booking.id})}"
+                      method="post">
+                    <button class="btn" type="submit">Отменить</button>
+                </form>
+                <span class="muted" th:if="${booking.status.name() != 'APPROVED'}">Действий нет</span>
+            </div>
+        </article>
+    </section>
 
     <nav class="pagination" th:if="${bookingsPage.totalPages > 1}" aria-label="Пагинация">
         <a th:if="${bookingsPage.hasPrevious()}"

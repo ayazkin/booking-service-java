@@ -7,58 +7,68 @@
 <main>
     <h1>Аудитории</h1>
 
-    <form class="filters" th:action="@{/rooms}" method="get">
-        <input type="hidden" name="filter" value="true">
-        <input type="hidden" name="size" th:value="${roomsPage.size}">
+    <details class="filter-panel">
+        <summary>
+            <span>
+                <strong>Поиск аудиторий</strong>
+                <small>Фильтры по номеру, вместимости, этажу и оборудованию</small>
+            </span>
+            <span class="filter-panel-icon" aria-hidden="true"></span>
+        </summary>
 
-        <label>
-            Номер или название
-            <input type="text" name="query" th:value="${query}">
-        </label>
+        <form class="filters" th:action="@{/rooms}" method="get">
+            <input type="hidden" name="filter" value="true">
+            <input type="hidden" name="size" th:value="${roomsPage.size}">
 
-        <label>
-            Вместимость от
-            <input type="number" name="minCapacity" min="1" th:value="${minCapacity}">
-        </label>
+            <label>
+                Номер или название
+                <input type="text" name="query" th:value="${query}">
+            </label>
 
-        <label>
-            Этаж
-            <input type="number" name="floor" th:value="${floor}">
-        </label>
+            <label>
+                Вместимость от
+                <input type="number" name="minCapacity" min="1" th:value="${minCapacity}">
+            </label>
 
-        <label>
-            Оборудование
-            <select name="equipmentId">
-                <option value="">Любое</option>
-                <option th:each="item : ${equipmentOptions}"
-                        th:value="${item.id}"
-                        th:text="${item.name}"
-                        th:selected="${equipmentId != null and item.id == equipmentId}">
-                    Проектор
-                </option>
-            </select>
-        </label>
+            <label>
+                Этаж
+                <input type="number" name="floor" th:value="${floor}">
+            </label>
 
-        <label>
-            Свободна с
-            <input type="datetime-local" name="startTime" th:value="${startTime}">
-        </label>
+            <label>
+                Оборудование
+                <select name="equipmentId">
+                    <option value="">Любое</option>
+                    <option th:each="item : ${equipmentOptions}"
+                            th:value="${item.id}"
+                            th:text="${item.name}"
+                            th:selected="${equipmentId != null and item.id == equipmentId}">
+                        Проектор
+                    </option>
+                </select>
+            </label>
 
-        <label>
-            Свободна до
-            <input type="datetime-local" name="endTime" th:value="${endTime}">
-        </label>
+            <label>
+                Свободна с
+                <input type="datetime-local" name="startTime" th:value="${startTime}">
+            </label>
 
-        <label class="checkbox">
-            <input type="checkbox" name="activeOnly" value="true" th:checked="${activeOnly}">
-            Только активные
-        </label>
+            <label>
+                Свободна до
+                <input type="datetime-local" name="endTime" th:value="${endTime}">
+            </label>
 
-        <div class="filter-actions">
-            <button class="primary" type="submit">Найти</button>
-            <a class="btn" th:href="@{/rooms}">Сбросить</a>
-        </div>
-    </form>
+            <label class="checkbox">
+                <input type="checkbox" name="activeOnly" value="true" th:checked="${activeOnly}">
+                Только активные
+            </label>
+
+            <div class="filter-actions">
+                <button class="btn primary" type="submit">Найти</button>
+                <a class="btn" th:href="@{/rooms}">Сбросить</a>
+            </div>
+        </form>
+    </details>
 
     <div class="empty" th:if="${roomsPage.empty}">
         Нет аудиторий по заданным фильтрам
@@ -90,7 +100,7 @@
             </td>
             <td th:text="${room.description ?: '-'}">-</td>
             <td>
-                <a class="button-link"
+                <a class="btn primary btn-sm"
                    th:if="${room.active}"
                    th:href="@{/bookings/new(roomId=${room.id},startTime=${startTime},endTime=${endTime})}">
                     Забронировать

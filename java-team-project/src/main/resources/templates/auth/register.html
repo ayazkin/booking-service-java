@@ -8,9 +8,9 @@
     <section class="auth-panel">
         <h1>Регистрация</h1>
 
-        <form th:action="@{/register}" th:object="${registerRequest}" method="post">
         <div class="oauth-login" th:if="${googleLoginEnabled}">
             <a class="btn google-login-button" th:href="@{/oauth2/authorization/google}">
+                <span class="google-mark" aria-hidden="true">G</span>
                 Войти через Google
             </a>
             <div class="oauth-divider">или</div>
