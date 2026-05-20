@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Доступ запрещен')}"></head>
+<body>
+<header th:replace="~{fragments/header :: header}"></header>
+
+<main class="error-page">
+    <section class="error-panel">
+        <p class="error-code" th:text="${status} ?: '403'">403</p>
+        <h1>Доступ запрещен</h1>
+        <p th:text="${message} ?: 'У вашей учетной записи нет прав для просмотра этой страницы.'">
+            У вашей учетной записи нет прав для просмотра этой страницы.
+        </p>
+        <div class="actions">
+            <a th:href="@{/}" class="btn primary">На главную</a>
+            <a th:href="@{/rooms}" class="btn">К аудиториям</a>
+        </div>
+    </section>
+</main>
+</body>
+</html>
