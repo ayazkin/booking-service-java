@@ -4,11 +4,12 @@
 <body>
 <header th:replace="~{fragments/header :: header}"></header>
 
-<main>
+<main class="home-page">
     <div class="hero">
+        <div class="hero-kicker">BookingService</div>
         <h1>Пространство для ваших идей</h1>
         <p>Современный сервис бронирования аудиторий и управления ресурсами. Просто. Быстро. Эффективно.</p>
-        <div class="actions">
+        <div class="actions hero-actions">
             <a th:href="@{/rooms}" class="btn primary">Найти аудиторию</a>
             <a th:href="@{/bookings/new}" class="btn">Забронировать</a>
         </div>

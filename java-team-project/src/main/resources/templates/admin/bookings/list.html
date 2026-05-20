@@ -64,7 +64,7 @@
         Бронирования не найдены
     </div>
 
-    <table th:if="${!bookingsPage.empty}">
+    <table class="admin-table admin-bookings-table" th:if="${!bookingsPage.empty}">
         <thead>
         <tr>
             <th>Пользователь</th>
@@ -93,13 +93,13 @@
             <td th:text="${booking.comment ?: '-'}">-</td>
             <td th:text="${booking.adminComment ?: '-'}">-</td>
             <td>
-                <div class="actions">
+                <div class="table-actions">
                     <form class="cancel-form"
                           th:if="${booking.status.name() == 'APPROVED'}"
                           th:action="@{/admin/bookings/{id}/cancel(id=${booking.id})}"
-                          method="post" >
-                        <textarea name="adminComment" required maxlength="1000" placeholder="Причина отмены" style="padding: 6px; font-size: 12px; min-height: 60px;"></textarea>
-                        <button class="btn" type="submit">Отменить</button>
+                          method="post">
+                        <textarea name="adminComment" required maxlength="1000" placeholder="Причина отмены"></textarea>
+                        <button class="btn danger" type="submit">Отменить</button>
                     </form>
                     <span th:if="${booking.status.name() != 'APPROVED'}">-</span>
                 </div>
