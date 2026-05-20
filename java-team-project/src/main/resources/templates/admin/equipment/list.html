@@ -5,7 +5,7 @@
 <body>
 <div th:replace="~{fragments/header :: header}"></div>
 <main>
-    <div class="admin-page-header">
+    <div class="page-header">
         <h1>Оборудование</h1>
         <a class="btn primary" th:href="@{/admin/equipment/new}">Добавить</a>
     </div>
@@ -14,7 +14,7 @@
         Оборудование не добавлено
     </div>
 
-    <table th:if="${!equipment.empty}">
+    <table class="admin-table" th:if="${!equipment.empty}">
         <thead>
         <tr>
             <th>Название</th>
@@ -31,12 +31,12 @@
                 <span class="status" th:text="${item.active ? 'Активно' : 'Отключено'}">Активно</span>
             </td>
             <td>
-                <div class="actions">
+                <div class="table-actions">
                     <a class="btn" th:href="@{/admin/equipment/{id}/edit(id=${item.id})}">Редактировать</a>
                     <form th:if="${item.active}"
                           th:action="@{/admin/equipment/{id}/deactivate(id=${item.id})}"
-                          method="post" >
-                        <button class="btn" type="submit">Отключить</button>
+                          method="post">
+                        <button class="btn danger" type="submit">Отключить</button>
                     </form>
                 </div>
             </td>

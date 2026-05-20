@@ -4,8 +4,10 @@
 
 .calendar-shell {
     background: #ffffff;
-    border: 1px solid #d7dce2;
-    padding: 18px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 22px;
+    box-shadow: var(--shadow);
 }
 
 .calendar-legend {
@@ -14,7 +16,7 @@
     flex-wrap: wrap;
     align-items: center;
     margin-bottom: 16px;
-    color: #4b5563;
+    color: var(--text-muted);
     font-size: 14px;
 }
 
@@ -39,17 +41,92 @@
     margin-bottom: 16px;
 }
 
+.fc {
+    color: var(--text-main);
+}
+
+.fc .fc-toolbar.fc-header-toolbar {
+    margin-bottom: 24px;
+}
+
+.fc .fc-toolbar-title {
+    font-size: 1.75rem;
+    font-weight: 800;
+}
+
 .fc .fc-button-primary {
-    background: #111827;
-    border-color: #111827;
+    background: var(--primary);
+    border-color: var(--primary);
+    border-radius: 10px;
+    box-shadow: none;
+    font-weight: 700;
+    transition: var(--transition);
+}
+
+.fc .fc-button-primary:hover,
+.fc .fc-button-primary:focus {
+    background: var(--primary-hover);
+    border-color: var(--primary-hover);
+    box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.25);
+}
+
+.fc .fc-button-primary:not(:disabled).fc-button-active {
+    background: #0f172a;
+    border-color: #0f172a;
 }
 
 .fc .fc-button-primary:disabled {
-    background: #8a94a3;
-    border-color: #8a94a3;
+    background: #cbd5e1;
+    border-color: #cbd5e1;
+    color: #475569;
+}
+
+.fc-theme-standard .fc-scrollgrid,
+.fc-theme-standard td,
+.fc-theme-standard th {
+    border-color: var(--border);
+}
+
+.fc .fc-col-header-cell {
+    background: #f8fafc;
+}
+
+.fc .fc-col-header-cell-cushion {
+    padding: 10px 4px;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    font-weight: 800;
+    text-decoration: none;
+    text-transform: uppercase;
+}
+
+.fc .fc-daygrid-day-number {
+    padding: 8px;
+    color: var(--text-main);
+    text-decoration: none;
+}
+
+.fc .fc-day-today {
+    background: #eff6ff !important;
 }
 
 .fc .fc-daygrid-event,
 .fc .fc-timegrid-event {
-    border-radius: 4px;
+    border-radius: 8px;
+    border: 0;
+    padding: 2px 4px;
+    font-weight: 700;
+}
+
+@media (max-width: 800px) {
+    .calendar-shell {
+        padding: 14px;
+        overflow-x: auto;
+    }
+
+    .fc .fc-toolbar.fc-header-toolbar {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 12px;
+    }
 }
