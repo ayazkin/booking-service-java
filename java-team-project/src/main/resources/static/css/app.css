@@ -505,6 +505,66 @@ input:focus, select:focus, textarea:focus {
     box-shadow: none;
 }
 
+.ajax-panel {
+    margin-bottom: 24px;
+    padding: 20px;
+    background: #ffffff;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+}
+
+.ajax-panel p {
+    margin: 0;
+    color: var(--text-muted);
+}
+
+.ajax-panel-error {
+    border-color: #fecaca;
+    background: #fef2f2;
+}
+
+.ajax-panel-error p {
+    color: #991b1b;
+}
+
+.ajax-panel-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 14px;
+}
+
+.ajax-panel-header span {
+    color: var(--text-muted);
+    font-size: 0.875rem;
+}
+
+.ajax-room-list {
+    display: grid;
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.ajax-room-list li {
+    display: grid;
+    grid-template-columns: minmax(180px, 1fr) auto minmax(160px, 0.8fr);
+    gap: 16px;
+    align-items: center;
+    padding: 12px 14px;
+    background: #f8fafc;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+}
+
+.ajax-room-list span,
+.ajax-room-list small {
+    color: var(--text-muted);
+}
+
 .actions {
     display: flex;
     align-items: center;

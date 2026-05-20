@@ -65,13 +65,20 @@
 
             <div class="filter-actions">
                 <button class="btn primary" type="submit">Найти</button>
+                <button class="btn" type="button" id="ajax-room-preview" th:data-url="@{/api/rooms/search}">
+                    Быстрый предпросмотр
+                </button>
                 <a class="btn" th:href="@{/rooms}">Сбросить</a>
             </div>
         </form>
     </details>
 
-    <div class="empty" th:if="${roomsPage.empty}">
-        Нет аудиторий по заданным фильтрам
+    <section id="ajax-room-results" class="ajax-panel" hidden aria-live="polite"></section>
+
+    <div class="empty empty-state" th:if="${roomsPage.empty}">
+        <h2>Нет аудиторий по заданным фильтрам</h2>
+        <p>Попробуйте изменить параметры поиска или сбросить фильтры.</p>
+        <a class="btn primary" th:href="@{/rooms}">Сбросить фильтры</a>
     </div>
 
     <table th:if="${!roomsPage.empty}">
@@ -134,5 +141,7 @@
         <span class="disabled" th:if="${!roomsPage.hasNext()}">Вперед</span>
     </nav>
 </main>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script th:src="@{/js/rooms-ajax.js}"></script>
 </body>
 </html>
