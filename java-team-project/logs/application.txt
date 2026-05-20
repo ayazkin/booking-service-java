@@ -186,3 +186,47 @@ Caused by: org.hibernate.HibernateException: Unable to determine Dialect without
 2026-05-19T22:48:24.332+03:00  INFO 22996 --- [java-team-project] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
 2026-05-19T22:48:24.335+03:00  INFO 22996 --- [java-team-project] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
 2026-05-19T22:48:24.341+03:00  INFO 22996 --- [java-team-project] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2026-05-20T14:30:30.064+03:00  INFO 12024 --- [java-team-project] [restartedMain] c.b.j.JavaTeamProjectApplication         : Starting JavaTeamProjectApplication using Java 25.0.1 with PID 12024 (D:\idea projects\booking-service-java\java-team-project\target\classes started by koca in D:\idea projects\booking-service-java\java-team-project)
+2026-05-20T14:30:30.067+03:00  INFO 12024 --- [java-team-project] [restartedMain] c.b.j.JavaTeamProjectApplication         : No active profile set, falling back to 1 default profile: "default"
+2026-05-20T14:30:30.112+03:00  INFO 12024 --- [java-team-project] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2026-05-20T14:30:30.113+03:00  INFO 12024 --- [java-team-project] [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2026-05-20T14:30:30.708+03:00  INFO 12024 --- [java-team-project] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-05-20T14:30:30.774+03:00  INFO 12024 --- [java-team-project] [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 58 ms. Found 6 JPA repository interfaces.
+2026-05-20T14:30:31.211+03:00  INFO 12024 --- [java-team-project] [restartedMain] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 8080 (http)
+2026-05-20T14:30:31.226+03:00  INFO 12024 --- [java-team-project] [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-05-20T14:30:31.227+03:00  INFO 12024 --- [java-team-project] [restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/11.0.21]
+2026-05-20T14:30:31.264+03:00  INFO 12024 --- [java-team-project] [restartedMain] b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 1150 ms
+2026-05-20T14:30:31.419+03:00  INFO 12024 --- [java-team-project] [restartedMain] org.hibernate.orm.jpa                    : HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-05-20T14:30:31.455+03:00  INFO 12024 --- [java-team-project] [restartedMain] org.hibernate.orm.core                   : HHH000001: Hibernate ORM core version 7.2.12.Final
+2026-05-20T14:30:31.853+03:00  INFO 12024 --- [java-team-project] [restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-05-20T14:30:31.878+03:00  INFO 12024 --- [java-team-project] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-05-20T14:30:32.042+03:00  INFO 12024 --- [java-team-project] [restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@41ebefd7
+2026-05-20T14:30:32.044+03:00  INFO 12024 --- [java-team-project] [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-05-20T14:30:32.141+03:00  INFO 12024 --- [java-team-project] [restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [jdbc:postgresql://localhost:5432/booking_db]
+	Database driver: PostgreSQL JDBC Driver
+	Database dialect: PostgreSQLDialect
+	Database version: 17.6
+	Default catalog/schema: booking_db/public
+	Autocommit mode: undefined/unknown
+	Isolation level: READ_COMMITTED [default READ_COMMITTED]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-05-20T14:30:33.094+03:00  INFO 12024 --- [java-team-project] [restartedMain] org.hibernate.orm.core                   : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-05-20T14:30:33.214+03:00  INFO 12024 --- [java-team-project] [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-05-20T14:30:33.292+03:00  INFO 12024 --- [java-team-project] [restartedMain] o.s.d.j.r.query.QueryEnhancerFactories   : Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-05-20T14:30:34.568+03:00  INFO 12024 --- [java-team-project] [restartedMain] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name databaseUserDetailsService
+2026-05-20T14:30:34.700+03:00  INFO 12024 --- [java-team-project] [restartedMain] o.s.b.w.a.WelcomePageHandlerMapping      : Adding welcome page template: index
+2026-05-20T14:30:34.983+03:00  INFO 12024 --- [java-team-project] [restartedMain] o.s.boot.tomcat.TomcatWebServer          : Tomcat started on port 8080 (http) with context path '/'
+2026-05-20T14:30:34.987+03:00  INFO 12024 --- [java-team-project] [restartedMain] c.b.j.JavaTeamProjectApplication         : Started JavaTeamProjectApplication in 5.243 seconds (process running for 5.773)
+2026-05-20T14:30:44.601+03:00  INFO 12024 --- [java-team-project] [http-nio-8080-exec-7] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-05-20T14:30:44.601+03:00  INFO 12024 --- [java-team-project] [http-nio-8080-exec-7] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-05-20T14:30:44.603+03:00  INFO 12024 --- [java-team-project] [http-nio-8080-exec-7] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2026-05-20T14:32:14.171+03:00  WARN 12024 --- [java-team-project] [http-nio-8080-exec-10] c.b.j.c.e.JsonSecurityExceptionHandler   : Access denied for GET /admin/rooms: Access Denied
+2026-05-20T14:33:57.781+03:00  INFO 12024 --- [java-team-project] [SpringApplicationShutdownHook] o.s.boot.tomcat.GracefulShutdown         : Commencing graceful shutdown. Waiting for active requests to complete
+2026-05-20T14:33:57.786+03:00  INFO 12024 --- [java-team-project] [tomcat-shutdown] o.s.boot.tomcat.GracefulShutdown         : Graceful shutdown complete
+2026-05-20T14:33:57.792+03:00  INFO 12024 --- [java-team-project] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-05-20T14:33:57.795+03:00  INFO 12024 --- [java-team-project] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2026-05-20T14:33:57.800+03:00  INFO 12024 --- [java-team-project] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.

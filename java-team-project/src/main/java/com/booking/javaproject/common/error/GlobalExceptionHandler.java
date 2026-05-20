@@ -91,6 +91,10 @@ public class GlobalExceptionHandler {
     }
 
     private String resolveErrorView(HttpStatusCode status) {
+        if (status.value() == HttpStatus.FORBIDDEN.value()) {
+            return "error/403";
+        }
+
         return status.value() == HttpStatus.NOT_FOUND.value() ? "error/404" : "error/500";
     }
 

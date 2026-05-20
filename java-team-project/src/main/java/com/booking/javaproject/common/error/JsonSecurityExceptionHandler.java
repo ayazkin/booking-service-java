@@ -1,5 +1,6 @@
 package com.booking.javaproject.common.error;
 
+import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -50,15 +51,25 @@ public class JsonSecurityExceptionHandler implements AuthenticationEntryPoint, A
             HttpServletRequest request,
             HttpServletResponse response,
             AccessDeniedException accessDeniedException
-    ) throws IOException {
+    ) throws IOException, ServletException {
         log.warn("Access denied for {} {}: {}", request.getMethod(), request.getRequestURI(), accessDeniedException.getMessage());
 
         if (!expectsJson(request)) {
-            response.sendError(HttpStatus.FORBIDDEN.value(), "Доступ запрещен");
+            forwardToForbiddenPage(request, response);
             return;
         }
 
         writeJson(response, HttpStatus.FORBIDDEN, "Доступ запрещен");
+    }
+
+    private void forwardToForbiddenPage(
+            HttpServletRequest request,
+            HttpServletResponse response
+    ) throws ServletException, IOException {
+        response.setStatus(HttpStatus.FORBIDDEN.value());
+        request.setAttribute(RequestDispatcher.ERROR_STATUS_CODE, HttpStatus.FORBIDDEN.value());
+        request.setAttribute(RequestDispatcher.ERROR_MESSAGE, "Доступ запрещен");
+        request.getRequestDispatcher("/error/403").forward(request, response);
     }
 
     private boolean expectsJson(HttpServletRequest request) {

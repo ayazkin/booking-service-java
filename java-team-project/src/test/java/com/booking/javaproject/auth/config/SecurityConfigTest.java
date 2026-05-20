@@ -12,6 +12,7 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.forwardedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -69,8 +70,18 @@ class SecurityConfigTest {
     void userCanOpenBookingPagesButCannotOpenAdminPages() throws Exception {
         mockMvc.perform(get("/bookings/new"))
                 .andExpect(status().isOk());
-        mockMvc.perform(get("/admin/rooms"))
-                .andExpect(status().isForbidden());
+        mockMvc.perform(get("/admin/rooms")
+                        .accept(MediaType.TEXT_HTML))
+                .andExpect(status().isForbidden())
+                .andExpect(forwardedUrl("/error/403"));
+    }
+
+    @Test
+    void forbiddenPageUsesCustomTemplate() throws Exception {
+        mockMvc.perform(get("/error/403")
+                        .accept(MediaType.TEXT_HTML))
+                .andExpect(status().isForbidden())
+                .andExpect(view().name("error/403"));
     }
 
     @Test

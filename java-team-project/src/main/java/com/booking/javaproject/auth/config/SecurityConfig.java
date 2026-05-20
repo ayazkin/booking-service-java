@@ -35,7 +35,7 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.GET, "/api/rooms", "/api/rooms/**", "/api/calendar/bookings").permitAll()
-                        .requestMatchers("/", "/rooms", "/rooms/**", "/calendar", "/register", "/login", "/oauth2/**", "/login/oauth2/**", "/error", "/css/**", "/Calendar/**").permitAll()
+                        .requestMatchers("/", "/rooms", "/rooms/**", "/calendar", "/register", "/login", "/oauth2/**", "/login/oauth2/**", "/error", "/error/**", "/css/**", "/Calendar/**").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/bookings/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers("/api/**").hasRole("ADMIN")
